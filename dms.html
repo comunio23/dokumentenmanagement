@@ -440,28 +440,44 @@
     .file-box button:hover { color: #EF4444; }
 
     /* OCR */
-    .ocr-row { display: none; align-items: center; gap: 8px; margin-bottom: 13px; flex-wrap: wrap; }
+    .ocr-box {
+      display: none;
+      margin-bottom: 14px;
+      border: 1px solid #DDD6FE;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #F5F3FF;
+    }
+    .ocr-box-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #EDE9FE;
+      border-bottom: 1px solid #DDD6FE;
+    }
+    .ocr-box-lbl { font-size: 11px; font-weight: 600; color: #5B21B6; display: flex; align-items: center; gap: 6px; }
+    .ocr-box pre { padding: 10px 12px; font-size: 11px; font-family: monospace; white-space: pre-wrap; max-height: 150px; overflow-y: auto; line-height: 1.5; color: var(--text); }
+
     .btn-ocr {
-      padding: 5px 12px;
+      padding: 4px 9px;
       border: 1px solid #7C3AED;
       background: #F5F3FF;
       color: #5B21B6;
-      border-radius: 6px;
-      font-size: 12px;
+      border-radius: 5px;
+      font-size: 11px;
       font-weight: 500;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       font-family: inherit;
     }
     .btn-ocr:hover { background: #EDE9FE; }
     .btn-ocr:disabled { opacity: .6; cursor: not-allowed; }
-    .ocr-hint { font-size: 11px; color: var(--muted); }
 
-    .ocr-box { display: none; margin-bottom: 13px; background: #FAFAF9; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }
-    .ocr-box details summary { padding: 8px 12px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; }
-    .ocr-box pre { padding: 0 12px 10px; font-size: 11px; font-family: monospace; white-space: pre-wrap; max-height: 150px; overflow-y: auto; line-height: 1.5; }
+    .ocr-row { display: none; align-items: center; gap: 8px; margin-bottom: 13px; flex-wrap: wrap; }
+    .ocr-hint { font-size: 11px; color: var(--muted); }
 
     /* Form */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 13px; }
@@ -693,6 +709,17 @@
         <button onclick="dateiEntfernen()">×</button>
       </div>
 
+      <div class="ocr-box" id="ocrBox">
+        <div class="ocr-box-head">
+          <span class="ocr-box-lbl" id="ocrBoxLbl">
+            <span class="spinner" id="ocrSpinner" style="border-top-color:#5B21B6;border-color:rgba(91,33,182,.2);width:12px;height:12px;border-width:2px;display:none"></span>
+            <span id="ocrBoxTxt">Erkannter Text</span>
+          </span>
+          <button class="btn-ocr" id="btnOcrRetry" style="display:none" onclick="fuehreOcrDurch()">↻ Erneut</button>
+        </div>
+        <pre id="ocrPre"></pre>
+      </div>
+
       <div class="ocr-row" id="ocrRow">
         <button class="btn-ocr" id="btnOcr" onclick="fuehreOcrDurch()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -701,13 +728,6 @@
           <span id="ocrBtnLbl">Analysieren</span>
         </button>
         <span class="ocr-hint" id="ocrHint"></span>
-      </div>
-
-      <div class="ocr-box" id="ocrBox">
-        <details>
-          <summary>📄 Erkannter Text (aufklappen)</summary>
-          <pre id="ocrPre"></pre>
-        </details>
       </div>
 
       <form id="neuForm" class="form-grid" onsubmit="return false">
@@ -1088,29 +1108,38 @@ function schliesseModal() {
   pendingOcrText = null;
 }
 
+function sollAutoOcr(file) {
+  const t = file.type, n = file.name.toLowerCase();
+  if (t === 'application/pdf' || t.startsWith('image/')) return true;
+  if (t.includes('wordprocessingml') || n.endsWith('.docx') || n.endsWith('.doc')) return true;
+  if (t.includes('spreadsheetml') || n.endsWith('.xlsx') || n.endsWith('.xls')) return true;
+  return false;
+}
+
 function setDatei(file) {
   pendingFile = file;
   document.getElementById('fileBox').style.display = 'flex';
   document.getElementById('fileBoxName').textContent = `${file.name}  ·  ${(file.size/1024).toFixed(0)} KB`;
   document.getElementById('dropZone').style.display = 'none';
-  document.getElementById('ocrRow').style.display = 'flex';
   document.getElementById('ocrBox').style.display = 'none';
+
   const n = file.name.toLowerCase(), t = file.type;
-  const isPdfImg = t==='application/pdf' || t.startsWith('image/');
-  const isDocx = t.includes('wordprocessingml') || n.endsWith('.docx');
-  const isXlsx = t.includes('spreadsheetml') || n.endsWith('.xlsx') || n.endsWith('.xls');
-  if (isPdfImg) {
-    document.getElementById('ocrBtnLbl').textContent = 'OCR via Mistral';
-    document.getElementById('ocrHint').textContent = 'Mistral OCR liest die Datei und befüllt das Formular';
-  } else if (isDocx) {
-    document.getElementById('ocrBtnLbl').textContent = 'Text aus Word extrahieren';
-    document.getElementById('ocrHint').textContent = 'Läuft lokal — kein API-Key nötig';
-  } else if (isXlsx) {
-    document.getElementById('ocrBtnLbl').textContent = 'Daten aus Excel lesen';
-    document.getElementById('ocrHint').textContent = 'Läuft lokal — kein API-Key nötig';
+  const isText = t.startsWith('text/') || ['.txt','.md','.eml','.csv','.html','.htm','.json','.xml','.log'].some(e=>n.endsWith(e));
+
+  if (sollAutoOcr(file)) {
+    // Auto-OCR: Box sofort zeigen, Button versteckt
+    document.getElementById('ocrRow').style.display = 'none';
+    setTimeout(() => fuehreOcrDurch(), 200);
+  } else if (isText) {
+    // Textdatei: manueller Button, kein Auto-OCR
+    document.getElementById('ocrRow').style.display = 'flex';
+    document.getElementById('ocrBtnLbl').textContent = 'Text analysieren';
+    document.getElementById('ocrHint').textContent = 'Liest die Datei lokal und befüllt das Formular';
   } else {
+    // Unbekannt: manuell anbieten
+    document.getElementById('ocrRow').style.display = 'flex';
     document.getElementById('ocrBtnLbl').textContent = 'Analysieren';
-    document.getElementById('ocrHint').textContent = 'Text extrahieren und Formular befüllen';
+    document.getElementById('ocrHint').textContent = 'Versucht Text zu extrahieren';
   }
 }
 
@@ -1122,6 +1151,10 @@ function dateiEntfernen() {
   document.getElementById('fileInput').value = '';
   document.getElementById('ocrRow').style.display = 'none';
   document.getElementById('ocrBox').style.display = 'none';
+  document.getElementById('ocrPre').textContent = '';
+  document.getElementById('ocrSpinner').style.display = 'none';
+  document.getElementById('ocrBoxTxt').textContent = 'Erkannter Text';
+  document.getElementById('btnOcrRetry').style.display = 'none';
 }
 
 // ── OCR / FILE EXTRACTION ──
@@ -1208,24 +1241,46 @@ async function ladeXLSX() {
 
 async function fuehreOcrDurch() {
   if (!pendingFile) return;
-  const btn = document.getElementById('btnOcr');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner" style="border-top-color:#5B21B6;border-color:rgba(91,33,182,.2);width:12px;height:12px;border-width:2px"></span> Analysiere …';
+
+  // Status-Box einblenden, Spinner an
+  const box    = document.getElementById('ocrBox');
+  const lbl    = document.getElementById('ocrBoxTxt');
+  const spin   = document.getElementById('ocrSpinner');
+  const retry  = document.getElementById('btnOcrRetry');
+  const pre    = document.getElementById('ocrPre');
+  const btnOcr = document.getElementById('btnOcr');
+
+  box.style.display = 'block';
+  spin.style.display = 'inline-block';
+  lbl.textContent = 'Analysiere …';
+  retry.style.display = 'none';
+  pre.textContent = '';
+  if (btnOcr) btnOcr.disabled = true;
 
   try {
     const text = await extrahiereText(pendingFile);
-    if (!text?.trim()) { toast('Kein Text erkannt','err'); return; }
+    if (!text?.trim()) {
+      lbl.textContent = 'Kein Text erkannt';
+      spin.style.display = 'none';
+      retry.style.display = 'inline-flex';
+      toast('Kein Text erkannt','err');
+      return;
+    }
     pendingOcrText = text;
-    document.getElementById('ocrBox').style.display = 'block';
-    document.getElementById('ocrPre').textContent = text.length > 1000 ? text.slice(0,1000)+'\n…(gekürzt)' : text;
+    pre.textContent = text.length > 1200 ? text.slice(0,1200)+'\n…(gekürzt)' : text;
+    lbl.textContent = 'Erkannter Text';
+    spin.style.display = 'none';
+    retry.style.display = 'inline-flex';
     fuellFormular(text);
     toast('Analysiert — Formular befüllt','ok');
   } catch (err) {
+    lbl.textContent = 'Fehler: ' + err.message;
+    spin.style.display = 'none';
+    retry.style.display = 'inline-flex';
     toast('OCR-Fehler: '+err.message,'err');
     console.error(err);
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg> <span id="ocrBtnLbl">${document.getElementById('ocrBtnLbl')?.textContent||'Analysieren'}</span>`;
+    if (btnOcr) btnOcr.disabled = false;
   }
 }
 
