@@ -1239,6 +1239,22 @@ async function ladeXLSX() {
   await new Promise((res,rej) => { const s=document.createElement('script'); s.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
 }
 
+async function debugOcrKey() {
+  try {
+    const res = await fetch(OCR_URL, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${SUPABASE_KEY}` },
+    });
+    const data = await res.json();
+    const msg = data.found?.length
+      ? `Key gefunden: ${data.found.join(', ')}`
+      : `Kein Key gefunden. Geprüft: ${(data.checked||[]).join(', ')}`;
+    alert('OCR Key-Diagnose:\n' + msg);
+  } catch (e) {
+    alert('Diagnose-Fehler: ' + e.message);
+  }
+}
+
 async function fuehreOcrDurch() {
   if (!pendingFile) return;
 
@@ -1277,7 +1293,16 @@ async function fuehreOcrDurch() {
     lbl.textContent = 'Fehler: ' + err.message;
     spin.style.display = 'none';
     retry.style.display = 'inline-flex';
-    toast('OCR-Fehler: '+err.message,'err');
+    const isKeyErr = err.message.includes('Key') || err.message.includes('konfiguriert');
+    toast(isKeyErr ? '⚠ API-Key nicht gefunden — Diagnose-Button im OCR-Bereich klicken' : 'OCR-Fehler: '+err.message, 'err');
+    if (isKeyErr) {
+      const diagBtn = document.createElement('button');
+      diagBtn.className = 'btn-ocr';
+      diagBtn.style.cssText = 'margin-left:8px;font-size:10px;padding:2px 7px';
+      diagBtn.textContent = '🔍 Diagnose';
+      diagBtn.onclick = debugOcrKey;
+      document.getElementById('ocrBox').querySelector('.ocr-box-head').appendChild(diagBtn);
+    }
     console.error(err);
   } finally {
     if (btnOcr) btnOcr.disabled = false;
