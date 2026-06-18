@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DMS — Dokumentenmanagement</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #2563EB;
+      --primary-light: #EFF6FF;
+      --bg: #F1F5F9;
+      --card: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #1E293B;
+      --muted: #64748B;
+      --radius: 10px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,.14);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+      z-index: 10;
+      box-shadow: 0 1px 0 var(--border);
+    }
+
+    .logo {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    #suche {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    #suche:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background .15s;
+    }
+    .btn-primary:hover { background: #1D4ED8; }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* ── APP BODY ── */
+    .app-body { flex: 1; display: flex; overflow: hidden; }
+
+    /* ── SIDEBAR ── */
+    aside.sidebar {
+      width: 220px;
+      background: white;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-section h3 {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 10px;
+    }
+
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+
+    .stat-card {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .stat-number { font-size: 22px; font-weight: 700; color: var(--primary); display: block; }
+    .stat-label { font-size: 11px; color: var(--muted); }
+
+    .filter-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 5px 8px;
+      border: none;
+      background: none;
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 2px;
+      transition: background .1s;
+    }
+
+    .filter-btn:hover { background: var(--bg); }
+    .filter-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+
+    .filter-count {
+      background: var(--border);
+      color: var(--muted);
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 8px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .filter-btn.active .filter-count { background: var(--primary); color: white; }
+
+    .drop-zone-sidebar {
+      margin: 14px 16px;
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 18px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .drop-zone-sidebar:hover, .drop-zone-sidebar.drag-over {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .drop-zone-sidebar svg { width: 24px; height: 24px; margin: 0 auto 7px; display: block; }
+
+    /* ── LIST AREA ── */
+    .list-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+    .list-toolbar {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 46px;
+      flex-shrink: 0;
+    }
+
+    .tab-btn {
+      padding: 5px 12px;
+      border: none;
+      background: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all .15s;
+    }
+
+    .tab-btn:hover { background: var(--bg); color: var(--text); }
+    .tab-btn.active { background: var(--primary); color: white; }
+
+    .tab-count {
+      padding: 1px 5px;
+      border-radius: 8px;
+      font-size: 11px;
+      background: rgba(255,255,255,.25);
+    }
+
+    .tab-btn:not(.active) .tab-count { background: var(--border); color: var(--muted); }
+
+    #dokumentListe {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    /* ── DOCUMENT CARDS ── */
+    .dok-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 15px;
+      cursor: pointer;
+      transition: box-shadow .15s, border-color .15s;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .dok-card:hover { box-shadow: var(--shadow); border-color: #CBD5E1; }
+    .dok-card.selected { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37,99,235,.12); }
+
+    .dok-card-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 5px;
+    }
+
+    .dok-nummer { font-size: 11px; font-weight: 600; color: var(--muted); font-family: monospace; }
+
+    .dok-titel {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 5px;
+    }
+
+    .dok-meta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dok-betrag { font-weight: 600; color: #059669; font-size: 13px; }
+
+    .dok-card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .dok-faellig { font-size: 11px; color: var(--muted); }
+    .dok-faellig.overdue { color: #EF4444; font-weight: 700; }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .badge-entwurf         { background: #F1F5F9; color: #64748B; }
+    .badge-in_bearbeitung  { background: #DBEAFE; color: #1D4ED8; }
+    .badge-freigegeben     { background: #D1FAE5; color: #065F46; }
+    .badge-versendet       { background: #EDE9FE; color: #5B21B6; }
+    .badge-archiviert      { background: #F5F0EB; color: #78716C; }
+    .badge-storniert       { background: #FEE2E2; color: #B91C1C; }
+    .badge-abgelehnt       { background: #FEE2E2; color: #B91C1C; }
+
+    .badge-eingang { background: #DBEAFE; color: #1D4ED8; }
+    .badge-ausgang { background: #FEF3C7; color: #B45309; }
+    .badge-intern  { background: #F3F4F6; color: #4B5563; }
+
+    .badge-dringend { background: #FEE2E2; color: #B91C1C; }
+    .badge-hoch     { background: #FEF3C7; color: #B45309; }
+    .badge-normal   { background: #F1F5F9; color: #64748B; }
+    .badge-niedrig  { background: #F0FDF4; color: #166534; }
+
+    /* ── DETAIL PANEL ── */
+    .detail-panel {
+      width: 370px;
+      background: white;
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+      transform: translateX(100%);
+      transition: transform .25s cubic-bezier(.4,0,.2,1);
+    }
+
+    .detail-panel.open { transform: translateX(0); }
+
+    .detail-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .detail-header h2 { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .btn-icon {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: var(--bg);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 15px;
+      flex-shrink: 0;
+      transition: background .1s;
+    }
+
+    .btn-icon:hover { background: var(--border); color: var(--text); }
+
+    .detail-body { flex: 1; overflow-y: auto; padding: 16px 18px; }
+
+    .detail-section { margin-bottom: 18px; }
+
+    .detail-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 8px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      gap: 12px;
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row-label { color: var(--muted); flex-shrink: 0; }
+    .detail-row-value { text-align: right; font-weight: 500; color: var(--text); }
+
+    .detail-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .btn-secondary {
+      padding: 7px 13px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 7px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background .1s;
+      font-family: inherit;
+    }
+
+    .btn-secondary:hover { background: var(--bg); }
+
+    .verlauf-item {
+      display: flex;
+      gap: 10px;
+      padding: 7px 0;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .verlauf-item:last-child { border-bottom: none; }
+
+    .verlauf-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .file-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      background: var(--bg);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .15s;
+      overflow: hidden;
+    }
+
+    .file-link:hover { background: var(--primary-light); border-color: var(--primary); }
+    .file-link span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .status-selector { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+
+    .status-option {
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color .15s, opacity .15s;
+      user-select: none;
+    }
+
+    .status-option:hover { opacity: .8; }
+    .status-option.selected { border-color: currentColor; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,.55);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: white;
+      border-radius: 14px;
+      width: 600px;
+      max-width: 96vw;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      transform: scale(.96) translateY(10px);
+      transition: transform .2s;
+    }
+
+    .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+
+    .modal-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h2 { font-size: 16px; font-weight: 600; }
+
+    .modal-body { flex: 1; overflow-y: auto; padding: 18px 22px; }
+
+    .modal-footer {
+      padding: 14px 22px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* ── DROP ZONE (modal) ── */
+    .modal-drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 28px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .modal-drop-zone:hover, .modal-drop-zone.drag-over {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .modal-drop-zone svg { width: 34px; height: 34px; margin: 0 auto 10px; display: block; }
+    .modal-drop-zone p { font-size: 14px; margin-bottom: 3px; }
+    .modal-drop-zone small { font-size: 12px; }
+
+    .file-selected-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 13px;
+      background: var(--primary-light);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      margin-bottom: 18px;
+    }
+
+    .file-selected-box svg { color: var(--primary); width: 18px; height: 18px; flex-shrink: 0; }
+    .file-selected-box span { font-size: 13px; font-weight: 500; color: var(--primary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-selected-box button { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 16px; line-height: 1; padding: 2px; }
+    .file-selected-box button:hover { color: #EF4444; }
+
+    /* ── FORM ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label { font-size: 12px; font-weight: 500; color: var(--muted); }
+
+    input, select, textarea {
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      background: white;
+      font-family: inherit;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+    }
+
+    textarea { resize: vertical; min-height: 72px; }
+
+    /* ── GLOBAL DRAG OVERLAY ── */
+    .global-drag-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(37,99,235,.88);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s;
+    }
+
+    .global-drag-overlay.active { opacity: 1; pointer-events: all; }
+
+    .drag-message {
+      text-align: center;
+      color: white;
+      pointer-events: none;
+    }
+
+    .drag-message svg { width: 64px; height: 64px; margin: 0 auto 16px; display: block; opacity: .85; }
+    .drag-message h2 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+    .drag-message p { font-size: 15px; opacity: .8; }
+
+    /* ── LOADING / EMPTY ── */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      color: var(--muted);
+      font-size: 14px;
+      gap: 10px;
+    }
+
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state svg { width: 44px; height: 44px; margin: 0 auto 14px; display: block; opacity: .35; }
+    .empty-state h3 { font-size: 15px; color: var(--text); margin-bottom: 5px; }
+    .empty-state p { font-size: 13px; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      background: #1E293B;
+      color: white;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      z-index: 300;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      max-width: 320px;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #059669; }
+    .toast.error { background: #DC2626; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+
+    /* ── PROGRESS BAR (upload) ── */
+    .upload-progress {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .upload-progress-bar {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 2px;
+      transition: width .3s;
+      width: 0%;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Global Drag Overlay -->
+<div class="global-drag-overlay" id="globalDragOverlay">
+  <div class="drag-message">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+    </svg>
+    <h2>Dokument ablegen</h2>
+    <p>Datei loslassen, um ein neues Dokument anzulegen</p>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="logo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    </svg>
+    Dokumentenmanagement
+  </div>
+
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="search" id="suche" placeholder="Titel, Nummer, Absender, Projekt …">
+  </div>
+
+  <div class="header-right">
+    <button class="btn-primary" id="btnNeu">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+        <path stroke-linecap="round" d="M12 5v14M5 12h14"/>
+      </svg>
+      Neues Dokument
+    </button>
+  </div>
+</header>
+
+<!-- ── APP BODY ── -->
+<div class="app-body">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <h3>Übersicht</h3>
+      <div class="stat-grid">
+        <div class="stat-card"><span class="stat-number" id="statGesamt">–</span><span class="stat-label">Gesamt</span></div>
+        <div class="stat-card"><span class="stat-number" id="statEingang">–</span><span class="stat-label">Eingang</span></div>
+        <div class="stat-card"><span class="stat-number" id="statAusgang">–</span><span class="stat-label">Ausgang</span></div>
+        <div class="stat-card"><span class="stat-number" id="statOffen">–</span><span class="stat-label">Offen</span></div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Status</h3>
+      <div id="statusFilter"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Priorität</h3>
+      <div id="prioritaetFilter"></div>
+    </div>
+
+    <!-- Sidebar Drop Zone -->
+    <div class="drop-zone-sidebar" id="sidebarDropZone">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+      </svg>
+      <div>Datei hierher ziehen<br>oder klicken</div>
+    </div>
+  </aside>
+
+  <!-- List Area -->
+  <div class="list-area">
+
+    <!-- Tabs -->
+    <div class="list-toolbar">
+      <button class="tab-btn active" data-richtung="">
+        Alle <span class="tab-count" id="cntAlle">–</span>
+      </button>
+      <button class="tab-btn" data-richtung="eingang">
+        ↙ Eingang <span class="tab-count" id="cntEingang">–</span>
+      </button>
+      <button class="tab-btn" data-richtung="ausgang">
+        ↗ Ausgang <span class="tab-count" id="cntAusgang">–</span>
+      </button>
+      <button class="tab-btn" data-richtung="intern">
+        ● Intern <span class="tab-count" id="cntIntern">–</span>
+      </button>
+    </div>
+
+    <!-- Document List -->
+    <div id="dokumentListe">
+      <div class="loading"><div class="spinner"></div>Dokumente werden geladen …</div>
+    </div>
+
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+      <h2 id="detailTitel">–</h2>
+      <button class="btn-icon" id="btnSchliessen" title="Schließen">✕</button>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+    <div class="detail-actions" id="detailActions"></div>
+  </div>
+
+</div>
+
+<!-- ── MODAL ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Neues Dokument anlegen</h2>
+      <button class="btn-icon" id="btnModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Drop Zone -->
+      <div class="modal-drop-zone" id="modalDropZone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+        </svg>
+        <p><strong>Datei hier ablegen</strong> oder klicken zum Auswählen</p>
+        <small>PDF, Word, Excel, Bilder · max. 50 MB</small>
+        <input type="file" id="fileInput" style="display:none"
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.webp">
+      </div>
+
+      <div id="fileAnzeige" style="display:none" class="file-selected-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <span id="fileNameAnzeige"></span>
+        <button onclick="dateiEntfernen()" title="Datei entfernen">×</button>
+      </div>
+
+      <form id="neuFormular" class="form-grid" onsubmit="return false">
+
+        <div class="form-group full">
+          <label>Titel *</label>
+          <input type="text" name="titel" required placeholder="z.B. Rechnung Müller GmbH August 2026">
+        </div>
+
+        <div class="form-group">
+          <label>Richtung</label>
+          <select name="richtung">
+            <option value="eingang">↙ Eingang</option>
+            <option value="ausgang">↗ Ausgang</option>
+            <option value="intern">● Intern</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select name="status">
+            <option value="entwurf">Entwurf</option>
+            <option value="in_bearbeitung">In Bearbeitung</option>
+            <option value="freigegeben">Freigegeben</option>
+            <option value="versendet">Versendet</option>
+            <option value="archiviert">Archiviert</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Kategorie</label>
+          <select name="kategorie_id" id="selKategorie">
+            <option value="">— keine —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Priorität</label>
+          <select name="prioritaet">
+            <option value="niedrig">Niedrig</option>
+            <option value="normal" selected>Normal</option>
+            <option value="hoch">Hoch</option>
+            <option value="dringend">Dringend</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Projekt</label>
+          <select name="projekt_id" id="selProjekt">
+            <option value="">— kein —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Gewerk</label>
+          <select name="gewerk_id" id="selGewerk">
+            <option value="">— kein —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Absender</label>
+          <select name="absender_id" id="selAbsender">
+            <option value="">— kein —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Empfänger</label>
+          <select name="empfaenger_id" id="selEmpfaenger">
+            <option value="">— kein —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Dokumentdatum</label>
+          <input type="date" name="dokumentdatum">
+        </div>
+
+        <div class="form-group">
+          <label>Fälligkeitsdatum</label>
+          <input type="date" name="faelligkeitsdatum">
+        </div>
+
+        <div class="form-group">
+          <label>Betrag (EUR)</label>
+          <input type="number" name="betrag" step="0.01" min="0" placeholder="0,00">
+        </div>
+
+        <div class="form-group">
+          <label>Vertraulichkeit</label>
+          <select name="vertraulichkeit">
+            <option value="intern">Intern</option>
+            <option value="oeffentlich">Öffentlich</option>
+            <option value="vertraulich">Vertraulich</option>
+            <option value="streng_vertraulich">Streng vertraulich</option>
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <label>Beschreibung</label>
+          <textarea name="beschreibung" placeholder="Kurze Beschreibung …"></textarea>
+        </div>
+
+        <div class="form-group full">
+          <label>Interne Notizen</label>
+          <textarea name="notizen" placeholder="Notizen für interne Verwendung …"></textarea>
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="btnAbbrechen">Abbrechen</button>
+      <button class="btn-primary" id="btnSpeichern">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+        Speichern
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCRIPT ── -->
+<script>
+const SUPABASE_URL = 'https://xuuitgtnnphcwjzkaihc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1dWl0Z3RubnBoY3dqemthaWhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3Njk5MDYsImV4cCI6MjA5NzM0NTkwNn0.4MPIuF73kmZ9ZXfedNEcxXiSPQf4V-O6SxHLlksX6Qs';
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── STATE ──
+let alleDoks = [];
+let alleKontakte = [];
+let alleProjekte = [];
+let alleGewerke = [];
+let alleKats = [];
+let aktivRichtung = '';
+let aktivStatus = '';
+let aktivPrio = '';
+let suchtext = '';
+let gewaehlteId = null;
+let pendingFile = null;
+
+// ── HELPERS ──
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmt(d) {
+  if (!d) return '–';
+  return new Date(d).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function fmtBetrag(b, w) {
+  if (!b) return null;
+  return parseFloat(b).toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' ' + (w || 'EUR');
+}
+
+function fmtSize(kb) {
+  if (!kb) return '';
+  return kb < 1024 ? kb + ' KB' : (kb / 1024).toFixed(1) + ' MB';
+}
+
+function isOverdue(d) { return !!d && new Date(d) < new Date(); }
+
+function kontaktName(k) {
+  if (!k) return null;
+  if (k.firma) return k.firma;
+  return [k.vorname, k.nachname].filter(Boolean).join(' ') || null;
+}
+
+const STATUS_LBL = {
+  entwurf: 'Entwurf', in_bearbeitung: 'In Bearbeitung', freigegeben: 'Freigegeben',
+  versendet: 'Versendet', archiviert: 'Archiviert', storniert: 'Storniert', abgelehnt: 'Abgelehnt'
+};
+
+const RICHTUNG_LBL = { eingang: '↙ Eingang', ausgang: '↗ Ausgang', intern: '● Intern' };
+const PRIO_LBL = { niedrig: 'Niedrig', normal: 'Normal', hoch: 'Hoch', dringend: 'Dringend' };
+
+function slbl(s) { return STATUS_LBL[s] || s; }
+function rlbl(r) { return RICHTUNG_LBL[r] || r; }
+function plbl(p) { return PRIO_LBL[p] || p; }
+
+function toast(msg, typ = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + typ;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.className = 'toast'; }, 3200);
+}
+
+// ── DATEN LADEN ──
+async function ladeAlles() {
+  const [docsR, konR, projR, gewR, katR] = await Promise.all([
+    sb.from('dokumente').select(`
+      *,
+      absender:kontakte!absender_id(id,firma,vorname,nachname),
+      empfaenger:kontakte!empfaenger_id(id,firma,vorname,nachname),
+      projekt:projekte(id,bezeichnung,auftragsnummer),
+      gewerk:gewerke(id,name),
+      kategorie:dokumentkategorien(id,name,farbe)
+    `).order('erstellt_am', { ascending: false }),
+    sb.from('kontakte').select('id,firma,vorname,nachname,typ').order('firma'),
+    sb.from('projekte').select('id,bezeichnung,auftragsnummer').order('bezeichnung'),
+    sb.from('gewerke').select('id,name').order('name'),
+    sb.from('dokumentkategorien').select('id,name').order('name')
+  ]);
+
+  if (docsR.error) { toast('Ladefehler: ' + docsR.error.message, 'error'); return; }
+
+  alleDoks = docsR.data || [];
+  alleKontakte = konR.data || [];
+  alleProjekte = projR.data || [];
+  alleGewerke = gewR.data || [];
+  alleKats = katR.data || [];
+
+  aktualisiereUI();
+}
+
+// ── UI AKTUALISIEREN ──
+function aktualisiereUI() {
+  const gefiltert = filtere(alleDoks);
+
+  document.getElementById('statGesamt').textContent  = alleDoks.length;
+  document.getElementById('statEingang').textContent = alleDoks.filter(d => d.richtung === 'eingang').length;
+  document.getElementById('statAusgang').textContent = alleDoks.filter(d => d.richtung === 'ausgang').length;
+  document.getElementById('statOffen').textContent   = alleDoks.filter(d => ['entwurf','in_bearbeitung','freigegeben'].includes(d.status)).length;
+
+  document.getElementById('cntAlle').textContent    = alleDoks.length;
+  document.getElementById('cntEingang').textContent = alleDoks.filter(d => d.richtung === 'eingang').length;
+  document.getElementById('cntAusgang').textContent = alleDoks.filter(d => d.richtung === 'ausgang').length;
+  document.getElementById('cntIntern').textContent  = alleDoks.filter(d => d.richtung === 'intern').length;
+
+  renderStatusFilter();
+  renderPrioFilter();
+  fuellDropdowns();
+  renderListe(gefiltert);
+}
+
+function filtere(docs) {
+  return docs.filter(d => {
+    if (aktivRichtung && d.richtung !== aktivRichtung) return false;
+    if (aktivStatus  && d.status    !== aktivStatus)   return false;
+    if (aktivPrio    && d.prioritaet!== aktivPrio)     return false;
+    if (suchtext) {
+      const q = suchtext.toLowerCase();
+      const hay = [d.titel, d.dokumentnummer, d.beschreibung, d.notizen,
+        kontaktName(d.absender), kontaktName(d.empfaenger),
+        d.projekt?.bezeichnung, d.gewerk?.name, d.kategorie?.name
+      ].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function renderSidebarFilter(containerId, items, getKey, getLbl, aktiv, setAktiv) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = items.map(item => {
+    const key = getKey(item);
+    const lbl = getLbl(item);
+    const cnt = alleDoks.filter(d => getKey(d) === key || d[Object.keys(d).find(k => d[k] === key)] === key).length;
+    const count = alleDoks.filter(d => {
+      if (containerId === 'statusFilter') return d.status === key;
+      if (containerId === 'prioritaetFilter') return d.prioritaet === key;
+      return false;
+    }).length;
+    const isActive = aktiv === key ? 'active' : '';
+    return `<button class="filter-btn ${isActive}" data-key="${esc(key)}">
+      <span>${esc(lbl)}</span>
+      <span class="filter-count">${count}</span>
+    </button>`;
+  }).join('');
+
+  el.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setAktiv(btn.dataset.key);
+      aktualisiereUI();
+    });
+  });
+}
+
+function renderStatusFilter() {
+  const statuses = ['entwurf','in_bearbeitung','freigegeben','versendet','archiviert'];
+  const el = document.getElementById('statusFilter');
+  el.innerHTML = statuses.map(s => {
+    const cnt = alleDoks.filter(d => d.status === s).length;
+    const isActive = aktivStatus === s ? 'active' : '';
+    return `<button class="filter-btn ${isActive}" data-key="${s}">
+      <span>${slbl(s)}</span><span class="filter-count">${cnt}</span>
+    </button>`;
+  }).join('');
+  el.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      aktivStatus = aktivStatus === btn.dataset.key ? '' : btn.dataset.key;
+      aktualisiereUI();
+    });
+  });
+}
+
+function renderPrioFilter() {
+  const prios = ['dringend','hoch','normal','niedrig'];
+  const el = document.getElementById('prioritaetFilter');
+  el.innerHTML = prios.map(p => {
+    const cnt = alleDoks.filter(d => d.prioritaet === p).length;
+    const isActive = aktivPrio === p ? 'active' : '';
+    return `<button class="filter-btn ${isActive}" data-key="${p}">
+      <span>${plbl(p)}</span><span class="filter-count">${cnt}</span>
+    </button>`;
+  }).join('');
+  el.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      aktivPrio = aktivPrio === btn.dataset.key ? '' : btn.dataset.key;
+      aktualisiereUI();
+    });
+  });
+}
+
+// ── DOKUMENT-LISTE ──
+function renderListe(docs) {
+  const el = document.getElementById('dokumentListe');
+  if (!docs.length) {
+    el.innerHTML = `<div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      <h3>Keine Dokumente gefunden</h3>
+      <p>Filter anpassen oder neues Dokument anlegen.</p>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = docs.map(d => cardHTML(d)).join('');
+  el.querySelectorAll('.dok-card').forEach(card => {
+    card.addEventListener('click', () => zeigeDetail(card.dataset.id));
+  });
+}
+
+function cardHTML(d) {
+  const absN = kontaktName(d.absender);
+  const empN = kontaktName(d.empfaenger);
+  const betrag = fmtBetrag(d.betrag, d.waehrung);
+  const overdue = isOverdue(d.faelligkeitsdatum);
+  const sel = d.id === gewaehlteId ? 'selected' : '';
+  const prioBadge = d.prioritaet !== 'normal'
+    ? `<span class="badge badge-${esc(d.prioritaet)}">${plbl(d.prioritaet)}</span>` : '';
+
+  const faelligEl = d.faelligkeitsdatum
+    ? `<span class="dok-faellig${overdue ? ' overdue' : ''}">${overdue ? '⚠ ' : ''}${fmt(d.faelligkeitsdatum)}</span>`
+    : '';
+
+  return `<div class="dok-card ${sel}" data-id="${esc(d.id)}">
+    <div class="dok-card-left">
+      <div class="dok-card-top">
+        <span class="dok-nummer">${esc(d.dokumentnummer || '–')}</span>
+        <span class="badge badge-${esc(d.richtung)}">${rlbl(d.richtung)}</span>
+        <span class="badge badge-${esc(d.status)}">${slbl(d.status)}</span>
+        ${prioBadge}
+      </div>
+      <div class="dok-titel">${esc(d.titel)}</div>
+      <div class="dok-meta">
+        ${absN ? `<span>Von: ${esc(absN)}</span>` : ''}
+        ${empN ? `<span>An: ${esc(empN)}</span>` : ''}
+        ${d.projekt ? `<span>📁 ${esc(d.projekt.bezeichnung)}</span>` : ''}
+        ${d.gewerk  ? `<span>🔧 ${esc(d.gewerk.name)}</span>` : ''}
+        ${d.kategorie ? `<span>🏷 ${esc(d.kategorie.name)}</span>` : ''}
+        ${betrag ? `<span class="dok-betrag">${esc(betrag)}</span>` : ''}
+      </div>
+    </div>
+    <div class="dok-card-right">
+      ${faelligEl}
+      <span style="font-size:11px;color:var(--muted)">${fmt(d.dokumentdatum)}</span>
+      ${d.dateiname ? `<span title="${esc(d.dateiname)}" style="font-size:11px;color:var(--primary)">📎</span>` : ''}
+    </div>
+  </div>`;
+}
+
+// ── DETAIL PANEL ──
+async function zeigeDetail(id) {
+  gewaehlteId = id;
+  document.querySelectorAll('.dok-card').forEach(c => c.classList.toggle('selected', c.dataset.id === id));
+
+  const d = alleDoks.find(x => x.id === id);
+  if (!d) return;
+
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('open');
+  document.getElementById('detailTitel').textContent = d.titel;
+  document.getElementById('detailBody').innerHTML = `<div class="loading"><div class="spinner"></div></div>`;
+
+  // Verlauf laden
+  const { data: verlauf } = await sb.from('dokument_verlauf')
+    .select('*').eq('dokument_id', id).order('geaendert_am', { ascending: false });
+
+  // Datei-Link
+  let dateiHTML = '';
+  if (d.dateipfad) {
+    const { data: urlData } = await sb.storage.from('dokumente').createSignedUrl(d.dateipfad, 3600);
+    if (urlData?.signedUrl) {
+      dateiHTML = `<a href="${esc(urlData.signedUrl)}" target="_blank" class="file-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <span>${esc(d.dateiname)}${d.dateigroesse_kb ? ' (' + fmtSize(d.dateigroesse_kb) + ')' : ''}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-left:auto">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+      </a>`;
+    }
+  } else if (d.dateiname) {
+    dateiHTML = `<div class="file-link" style="opacity:.5;cursor:default">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      <span>${esc(d.dateiname)} (kein Upload)</span>
+    </div>`;
+  }
+
+  const overdue = isOverdue(d.faelligkeitsdatum);
+
+  function row(label, value, extra = '') {
+    if (!value && value !== 0) return '';
+    return `<div class="detail-row">
+      <span class="detail-row-label">${esc(label)}</span>
+      <span class="detail-row-value" ${extra}>${value}</span>
+    </div>`;
+  }
+
+  document.getElementById('detailBody').innerHTML = `
+
+    <div class="detail-section">
+      <div class="detail-section-title">Allgemein</div>
+      ${row('Nummer', `<span style="font-family:monospace">${esc(d.dokumentnummer||'–')}</span>`)}
+      ${row('Richtung', `<span class="badge badge-${esc(d.richtung)}">${rlbl(d.richtung)}</span>`)}
+      ${row('Status', `<span class="badge badge-${esc(d.status)}">${slbl(d.status)}</span>`)}
+      ${row('Priorität', `<span class="badge badge-${esc(d.prioritaet)}">${plbl(d.prioritaet)}</span>`)}
+      ${d.kategorie ? row('Kategorie', esc(d.kategorie.name)) : ''}
+      ${row('Vertraulichkeit', esc(d.vertraulichkeit))}
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Beteiligte</div>
+      ${row('Absender',  esc(kontaktName(d.absender)  || '–'))}
+      ${row('Empfänger', esc(kontaktName(d.empfaenger) || '–'))}
+      ${d.projekt ? row('Projekt', esc(d.projekt.bezeichnung + (d.projekt.auftragsnummer ? ' (' + d.projekt.auftragsnummer + ')' : ''))) : ''}
+      ${d.gewerk  ? row('Gewerk',  esc(d.gewerk.name)) : ''}
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Daten & Beträge</div>
+      ${row('Dokumentdatum', fmt(d.dokumentdatum))}
+      ${d.eingangsdatum ? row('Eingangsdatum', fmt(d.eingangsdatum)) : ''}
+      ${d.faelligkeitsdatum ? `<div class="detail-row">
+        <span class="detail-row-label">Fällig am</span>
+        <span class="detail-row-value" style="${overdue ? 'color:#EF4444;font-weight:700' : ''}">${fmt(d.faelligkeitsdatum)}${overdue ? ' ⚠' : ''}</span>
+      </div>` : ''}
+      ${d.betrag ? `<div class="detail-row">
+        <span class="detail-row-label">Betrag</span>
+        <span class="detail-row-value" style="color:#059669;font-weight:700">${esc(fmtBetrag(d.betrag, d.waehrung))}</span>
+      </div>` : ''}
+    </div>
+
+    ${d.beschreibung || d.notizen ? `<div class="detail-section">
+      <div class="detail-section-title">Beschreibung & Notizen</div>
+      ${d.beschreibung ? `<p style="font-size:13px;line-height:1.6;margin-bottom:10px">${esc(d.beschreibung)}</p>` : ''}
+      ${d.notizen ? `<p style="font-size:12px;color:var(--muted);background:var(--bg);padding:10px;border-radius:7px;line-height:1.6">${esc(d.notizen)}</p>` : ''}
+    </div>` : ''}
+
+    ${dateiHTML ? `<div class="detail-section">
+      <div class="detail-section-title">Anhang</div>
+      ${dateiHTML}
+    </div>` : ''}
+
+    <div class="detail-section">
+      <div class="detail-section-title">Status ändern</div>
+      <div class="status-selector">
+        ${['entwurf','in_bearbeitung','freigegeben','versendet','archiviert','storniert'].map(s => `
+          <button class="badge badge-${s} status-option${d.status===s?' selected':''}"
+            onclick="aendereStatus('${esc(d.id)}','${s}')">${slbl(s)}</button>
+        `).join('')}
+      </div>
+    </div>
+
+    ${verlauf?.length ? `<div class="detail-section">
+      <div class="detail-section-title">Verlauf</div>
+      ${verlauf.map(v => `<div class="verlauf-item">
+        <div class="verlauf-dot"></div>
+        <div>
+          <div style="font-weight:600">${v.alter_status ? slbl(v.alter_status) + ' → ' : ''}${slbl(v.neuer_status)}</div>
+          ${v.kommentar ? `<div style="color:var(--muted)">${esc(v.kommentar)}</div>` : ''}
+          <div style="color:var(--muted);font-size:11px">${new Date(v.geaendert_am).toLocaleString('de-DE')}</div>
+        </div>
+      </div>`).join('')}
+    </div>` : ''}
+  `;
+
+  document.getElementById('detailActions').innerHTML = `
+    <button class="btn-secondary" onclick="window.print()">🖨 Drucken</button>
+  `;
+}
+
+async function aendereStatus(id, neuerStatus) {
+  const d = alleDoks.find(x => x.id === id);
+  const alterStatus = d?.status;
+  const { error } = await sb.from('dokumente').update({ status: neuerStatus, aktualisiert_am: new Date().toISOString() }).eq('id', id);
+  if (error) { toast('Fehler: ' + error.message, 'error'); return; }
+  await sb.from('dokument_verlauf').insert({ dokument_id: id, alter_status: alterStatus, neuer_status: neuerStatus });
+  toast('Status: ' + slbl(neuerStatus), 'success');
+  await ladeAlles();
+  if (gewaehlteId) setTimeout(() => zeigeDetail(gewaehlteId), 100);
+}
+
+// ── DROPDOWNS ──
+function fuellDropdowns() {
+  const kOpts = alleKats.map(k => `<option value="${esc(k.id)}">${esc(k.name)}</option>`).join('');
+  const pOpts = alleProjekte.map(p => `<option value="${esc(p.id)}">${esc(p.bezeichnung)}${p.auftragsnummer?' ('+p.auftragsnummer+')':''}</option>`).join('');
+  const gOpts = alleGewerke.map(g => `<option value="${esc(g.id)}">${esc(g.name)}</option>`).join('');
+  const konOpts = alleKontakte.map(k => {
+    const name = k.firma || [k.vorname, k.nachname].filter(Boolean).join(' ');
+    return `<option value="${esc(k.id)}">${esc(name)}${k.typ ? ' ('+k.typ+')' : ''}</option>`;
+  }).join('');
+  const L = '<option value="">— keine —</option>';
+  document.getElementById('selKategorie').innerHTML  = L + kOpts;
+  document.getElementById('selProjekt').innerHTML    = L + pOpts;
+  document.getElementById('selGewerk').innerHTML     = L + gOpts;
+  document.getElementById('selAbsender').innerHTML   = L + konOpts;
+  document.getElementById('selEmpfaenger').innerHTML = L + konOpts;
+}
+
+// ── MODAL ──
+function oeffneModal(datei = null) {
+  document.getElementById('neuFormular').reset();
+  dateiEntfernen();
+  document.querySelector('[name="dokumentdatum"]').value = new Date().toISOString().slice(0, 10);
+  if (datei) setDatei(datei);
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function schliesseModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  pendingFile = null;
+}
+
+function setDatei(file) {
+  pendingFile = file;
+  document.getElementById('fileAnzeige').style.display = 'flex';
+  document.getElementById('fileNameAnzeige').textContent = file.name + ' · ' + (file.size / 1024).toFixed(0) + ' KB';
+  document.getElementById('modalDropZone').style.display = 'none';
+}
+
+function dateiEntfernen() {
+  pendingFile = null;
+  document.getElementById('fileAnzeige').style.display = 'none';
+  document.getElementById('modalDropZone').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+}
+
+async function naechsteNummer() {
+  const { data } = await sb.from('dokumente').select('dokumentnummer').order('erstellt_am', { ascending: false }).limit(1);
+  const last = data?.[0]?.dokumentnummer;
+  if (!last) return `DOK-${new Date().getFullYear()}-00001`;
+  const m = last.match(/(\d+)$/);
+  if (!m) return `DOK-${new Date().getFullYear()}-00001`;
+  return `DOK-${new Date().getFullYear()}-${String(parseInt(m[1]) + 1).padStart(5, '0')}`;
+}
+
+async function speichereDokument() {
+  const form = document.getElementById('neuFormular');
+  const fd = new FormData(form);
+  const titel = fd.get('titel')?.trim();
+  if (!titel) { toast('Bitte Titel eingeben', 'error'); return; }
+
+  const btn = document.getElementById('btnSpeichern');
+  btn.disabled = true;
+  btn.textContent = 'Speichern …';
+
+  try {
+    let dateipfad = null, dateiname = null, dateigroesse_kb = null, dateityp = null;
+
+    if (pendingFile) {
+      const nummer = await naechsteNummer();
+      const ext = pendingFile.name.split('.').pop();
+      const pfad = `${nummer}_${Date.now()}.${ext}`;
+      const { error: upErr } = await sb.storage.from('dokumente').upload(pfad, pendingFile, { contentType: pendingFile.type });
+      if (upErr) throw upErr;
+      dateipfad = pfad;
+      dateiname = pendingFile.name;
+      dateigroesse_kb = Math.ceil(pendingFile.size / 1024);
+      dateityp = pendingFile.type;
+    }
+
+    const dokumentnummer = await naechsteNummer();
+
+    const payload = {
+      dokumentnummer,
+      titel,
+      beschreibung:    fd.get('beschreibung')    || null,
+      notizen:         fd.get('notizen')          || null,
+      richtung:        fd.get('richtung'),
+      status:          fd.get('status'),
+      prioritaet:      fd.get('prioritaet'),
+      vertraulichkeit: fd.get('vertraulichkeit'),
+      kategorie_id:    fd.get('kategorie_id')    || null,
+      projekt_id:      fd.get('projekt_id')      || null,
+      gewerk_id:       fd.get('gewerk_id')       || null,
+      absender_id:     fd.get('absender_id')     || null,
+      empfaenger_id:   fd.get('empfaenger_id')   || null,
+      dokumentdatum:   fd.get('dokumentdatum')   || null,
+      faelligkeitsdatum: fd.get('faelligkeitsdatum') || null,
+      betrag:          fd.get('betrag') ? parseFloat(fd.get('betrag')) : null,
+      waehrung:        'EUR',
+      dateipfad, dateiname, dateigroesse_kb, dateityp,
+    };
+
+    const { data: neu, error } = await sb.from('dokumente').insert(payload).select().single();
+    if (error) throw error;
+
+    await sb.from('dokument_verlauf').insert({ dokument_id: neu.id, neuer_status: payload.status, kommentar: 'Dokument angelegt' });
+
+    toast(dokumentnummer + ' gespeichert', 'success');
+    schliesseModal();
+    await ladeAlles();
+    setTimeout(() => zeigeDetail(neu.id), 150);
+
+  } catch (err) {
+    toast('Fehler: ' + err.message, 'error');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Speichern`;
+  }
+}
+
+// ── DRAG & DROP ──
+let dragCnt = 0;
+
+document.addEventListener('dragenter', e => {
+  if (!e.dataTransfer?.types?.includes('Files')) return;
+  e.preventDefault();
+  if (++dragCnt === 1) document.getElementById('globalDragOverlay').classList.add('active');
+});
+
+document.addEventListener('dragleave', e => {
+  if (--dragCnt <= 0) { dragCnt = 0; document.getElementById('globalDragOverlay').classList.remove('active'); }
+});
+
+document.addEventListener('dragover', e => e.preventDefault());
+
+document.addEventListener('drop', e => {
+  e.preventDefault();
+  dragCnt = 0;
+  document.getElementById('globalDragOverlay').classList.remove('active');
+  const file = e.dataTransfer?.files?.[0];
+  if (file) oeffneModal(file);
+});
+
+// Modal Drop Zone
+const mdz = document.getElementById('modalDropZone');
+mdz.addEventListener('click', () => document.getElementById('fileInput').click());
+mdz.addEventListener('dragover',  e => { e.preventDefault(); e.stopPropagation(); mdz.classList.add('drag-over'); });
+mdz.addEventListener('dragleave', () => mdz.classList.remove('drag-over'));
+mdz.addEventListener('drop', e => {
+  e.preventDefault(); e.stopPropagation();
+  mdz.classList.remove('drag-over');
+  const file = e.dataTransfer?.files?.[0];
+  if (file) setDatei(file);
+});
+
+document.getElementById('fileInput').addEventListener('change', e => {
+  if (e.target.files?.[0]) setDatei(e.target.files[0]);
+});
+
+// Sidebar Drop Zone
+const sdz = document.getElementById('sidebarDropZone');
+sdz.addEventListener('click',    () => oeffneModal());
+sdz.addEventListener('dragover',  e => { e.preventDefault(); e.stopPropagation(); sdz.classList.add('drag-over'); });
+sdz.addEventListener('dragleave', () => sdz.classList.remove('drag-over'));
+sdz.addEventListener('drop', e => {
+  e.preventDefault(); e.stopPropagation();
+  sdz.classList.remove('drag-over');
+  const file = e.dataTransfer?.files?.[0];
+  if (file) oeffneModal(file);
+});
+
+// ── TABS ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    aktivRichtung = btn.dataset.richtung;
+    aktualisiereUI();
+  });
+});
+
+// ── SUCHE ──
+document.getElementById('suche').addEventListener('input', e => {
+  suchtext = e.target.value;
+  aktualisiereUI();
+});
+
+// ── BUTTONS ──
+document.getElementById('btnNeu').addEventListener('click', () => oeffneModal());
+document.getElementById('btnSpeichern').addEventListener('click', speichereDokument);
+document.getElementById('btnModalClose').addEventListener('click', schliesseModal);
+document.getElementById('btnAbbrechen').addEventListener('click', schliesseModal);
+document.getElementById('btnSchliessen').addEventListener('click', () => {
+  document.getElementById('detailPanel').classList.remove('open');
+  gewaehlteId = null;
+  document.querySelectorAll('.dok-card').forEach(c => c.classList.remove('selected'));
+});
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target.id === 'modalOverlay') schliesseModal();
+});
+
+// ── START ──
+ladeAlles();
+</script>
+</body>
+</html>
