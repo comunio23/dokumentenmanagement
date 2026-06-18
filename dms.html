@@ -12,13 +12,10 @@
       --primary: #2563EB;
       --primary-light: #EFF6FF;
       --bg: #F1F5F9;
-      --card: #FFFFFF;
       --border: #E2E8F0;
       --text: #1E293B;
       --muted: #64748B;
-      --radius: 10px;
-      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
-      --shadow-lg: 0 10px 30px rgba(0,0,0,.14);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,.15);
     }
 
     body {
@@ -33,86 +30,68 @@
 
     /* ── HEADER ── */
     header {
-      background: white;
+      background: #fff;
       border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-      height: 60px;
+      height: 54px;
+      padding: 0 18px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       flex-shrink: 0;
-      z-index: 10;
-      box-shadow: 0 1px 0 var(--border);
+      z-index: 20;
     }
 
     .logo {
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--primary);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       white-space: nowrap;
-      user-select: none;
     }
 
-    .search-wrap {
-      flex: 1;
-      max-width: 420px;
-      position: relative;
-    }
-
-    .search-wrap svg {
-      position: absolute;
-      left: 11px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 15px;
-      height: 15px;
-      color: var(--muted);
-      pointer-events: none;
-    }
+    .search-wrap { flex: 1; max-width: 360px; position: relative; }
+    .search-wrap svg { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); width: 13px; color: var(--muted); pointer-events: none; }
 
     #suche {
       width: 100%;
-      padding: 8px 12px 8px 34px;
+      padding: 6px 10px 6px 30px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 7px;
       font-size: 13px;
       outline: none;
       background: var(--bg);
       color: var(--text);
     }
-
-    #suche:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
-
-    .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    #suche:focus { border-color: var(--primary); background: #fff; }
 
     .btn-primary {
       background: var(--primary);
-      color: white;
+      color: #fff;
       border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 7px 13px;
+      border-radius: 7px;
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       white-space: nowrap;
-      transition: background .15s;
+      margin-left: auto;
+      font-family: inherit;
     }
     .btn-primary:hover { background: #1D4ED8; }
     .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
 
-    /* ── APP BODY ── */
-    .app-body { flex: 1; display: flex; overflow: hidden; }
+    /* ── LAYOUT ── */
+    .app-body { flex: 1; display: flex; overflow: hidden; position: relative; }
 
     /* ── SIDEBAR ── */
-    aside.sidebar {
-      width: 220px;
-      background: white;
+    aside {
+      width: 200px;
+      background: #fff;
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
@@ -120,368 +99,274 @@
       flex-shrink: 0;
     }
 
-    .sidebar-section {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-    }
+    .sb-sec { padding: 12px 13px; border-bottom: 1px solid var(--border); }
+    .sb-sec h3 { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
 
-    .sidebar-section h3 {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: 10px;
-    }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .stat-card { background: var(--bg); border-radius: 7px; padding: 7px 5px; text-align: center; }
+    .stat-num { font-size: 19px; font-weight: 700; color: var(--primary); display: block; }
+    .stat-lbl { font-size: 10px; color: var(--muted); }
 
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-
-    .stat-card {
-      background: var(--bg);
-      border-radius: 8px;
-      padding: 10px 8px;
-      text-align: center;
-    }
-
-    .stat-number { font-size: 22px; font-weight: 700; color: var(--primary); display: block; }
-    .stat-label { font-size: 11px; color: var(--muted); }
-
-    .filter-btn {
+    .sb-btn {
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 5px 8px;
+      padding: 4px 6px;
       border: none;
       background: none;
-      border-radius: 6px;
+      border-radius: 5px;
       font-size: 12px;
       color: var(--text);
       cursor: pointer;
       text-align: left;
       margin-bottom: 2px;
-      transition: background .1s;
+      font-family: inherit;
     }
+    .sb-btn:hover { background: var(--bg); }
+    .sb-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+    .sb-cnt { font-size: 10px; background: var(--border); color: var(--muted); padding: 1px 5px; border-radius: 8px; min-width: 18px; text-align: center; }
+    .sb-btn.active .sb-cnt { background: var(--primary); color: #fff; }
 
-    .filter-btn:hover { background: var(--bg); }
-    .filter-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
-
-    .filter-count {
-      background: var(--border);
-      color: var(--muted);
-      font-size: 10px;
-      padding: 1px 5px;
-      border-radius: 8px;
-      min-width: 20px;
-      text-align: center;
-    }
-
-    .filter-btn.active .filter-count { background: var(--primary); color: white; }
-
-    .drop-zone-sidebar {
-      margin: 14px 16px;
+    .drop-sb {
+      margin: 10px 13px 14px;
       border: 2px dashed var(--border);
-      border-radius: 10px;
-      padding: 18px 12px;
+      border-radius: 9px;
+      padding: 14px 8px;
       text-align: center;
       cursor: pointer;
-      transition: all .2s;
+      font-size: 11px;
       color: var(--muted);
-      font-size: 12px;
+      transition: all .2s;
       line-height: 1.5;
     }
+    .drop-sb svg { width: 20px; margin: 0 auto 5px; display: block; }
+    .drop-sb:hover, .drop-sb.drag-over { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
 
-    .drop-zone-sidebar:hover, .drop-zone-sidebar.drag-over {
-      border-color: var(--primary);
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-
-    .drop-zone-sidebar svg { width: 24px; height: 24px; margin: 0 auto 7px; display: block; }
-
-    /* ── LIST AREA ── */
-    .list-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+    /* ── MAIN ── */
+    .main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
 
     .list-toolbar {
-      background: white;
+      background: #fff;
       border-bottom: 1px solid var(--border);
-      padding: 0 20px;
+      padding: 0 14px;
       display: flex;
       align-items: center;
-      gap: 4px;
-      height: 46px;
+      gap: 3px;
+      height: 40px;
       flex-shrink: 0;
     }
 
-    .tab-btn {
-      padding: 5px 12px;
+    .tab {
+      padding: 4px 10px;
       border: none;
       background: none;
-      border-radius: 6px;
-      font-size: 13px;
+      border-radius: 5px;
+      font-size: 12px;
       font-weight: 500;
       color: var(--muted);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 5px;
-      transition: all .15s;
+      gap: 4px;
+      font-family: inherit;
     }
+    .tab:hover { background: var(--bg); }
+    .tab.active { background: var(--primary); color: #fff; }
+    .tab-cnt { font-size: 10px; padding: 1px 5px; border-radius: 8px; background: rgba(255,255,255,.25); }
+    .tab:not(.active) .tab-cnt { background: var(--border); color: var(--muted); }
 
-    .tab-btn:hover { background: var(--bg); color: var(--text); }
-    .tab-btn.active { background: var(--primary); color: white; }
+    /* ── TABLE ── */
+    .table-wrap { flex: 1; overflow: auto; }
 
-    .tab-count {
-      padding: 1px 5px;
-      border-radius: 8px;
-      font-size: 11px;
-      background: rgba(255,255,255,.25);
-    }
+    .dok-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 
-    .tab-btn:not(.active) .tab-count { background: var(--border); color: var(--muted); }
-
-    #dokumentListe {
-      flex: 1;
-      overflow-y: auto;
-      padding: 14px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    /* ── DOCUMENT CARDS ── */
-    .dok-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 13px 15px;
-      cursor: pointer;
-      transition: box-shadow .15s, border-color .15s;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: start;
-    }
-
-    .dok-card:hover { box-shadow: var(--shadow); border-color: #CBD5E1; }
-    .dok-card.selected { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37,99,235,.12); }
-
-    .dok-card-top {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 5px;
-    }
-
-    .dok-nummer { font-size: 11px; font-weight: 600; color: var(--muted); font-family: monospace; }
-
-    .dok-titel {
-      font-size: 14px;
+    .dok-table thead th {
+      background: #fff;
+      border-bottom: 2px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
       font-weight: 600;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 5px;
-    }
-
-    .dok-meta {
-      font-size: 12px;
       color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      white-space: nowrap;
+      user-select: none;
     }
+    .dok-table thead th.sortable { cursor: pointer; }
+    .dok-table thead th.sortable:hover { color: var(--primary); }
+    .dok-table thead th.sorted { color: var(--primary); }
+    .sort-ind { margin-left: 2px; opacity: .4; font-size: 10px; }
+    .sorted .sort-ind { opacity: 1; }
 
-    .dok-betrag { font-weight: 600; color: #059669; font-size: 13px; }
-
-    .dok-card-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 5px;
-      flex-shrink: 0;
+    .dok-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background .1s;
     }
+    .dok-table tbody tr:hover { background: #F8FAFC; }
+    .dok-table tbody tr.sel { background: var(--primary-light) !important; }
+    .dok-table tbody tr.overdue { border-left: 3px solid #EF4444; }
 
-    .dok-faellig { font-size: 11px; color: var(--muted); }
-    .dok-faellig.overdue { color: #EF4444; font-weight: 700; }
+    .dok-table tbody td { padding: 8px 10px; vertical-align: middle; }
+    td.td-nr { font-family: monospace; font-size: 11px; color: var(--muted); white-space: nowrap; }
+    td.td-titel { font-weight: 500; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    td.td-betrag { text-align: right; font-weight: 600; color: #059669; white-space: nowrap; }
+    td.td-faellig { white-space: nowrap; font-size: 12px; }
+    td.td-faellig.red { color: #EF4444; font-weight: 600; }
+    td.td-ic { text-align: center; width: 34px; padding: 8px 3px; }
+    td.td-richtung { width: 34px; padding: 8px 3px; text-align: center; }
+
+    .empty-row td { text-align: center; padding: 60px; color: var(--muted); font-size: 13px; }
 
     /* ── BADGES ── */
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
       padding: 2px 7px;
       border-radius: 10px;
       font-size: 11px;
       font-weight: 500;
       white-space: nowrap;
     }
+    .b-entwurf        { background:#F1F5F9; color:#64748B; }
+    .b-in_bearbeitung { background:#DBEAFE; color:#1D4ED8; }
+    .b-freigegeben    { background:#D1FAE5; color:#065F46; }
+    .b-versendet      { background:#EDE9FE; color:#5B21B6; }
+    .b-archiviert     { background:#F5F0EB; color:#78716C; }
+    .b-storniert, .b-abgelehnt { background:#FEE2E2; color:#B91C1C; }
+    .b-eingang { background:#DBEAFE; color:#1D4ED8; }
+    .b-ausgang { background:#FEF3C7; color:#B45309; }
+    .b-intern  { background:#F3F4F6; color:#4B5563; }
 
-    .badge-entwurf         { background: #F1F5F9; color: #64748B; }
-    .badge-in_bearbeitung  { background: #DBEAFE; color: #1D4ED8; }
-    .badge-freigegeben     { background: #D1FAE5; color: #065F46; }
-    .badge-versendet       { background: #EDE9FE; color: #5B21B6; }
-    .badge-archiviert      { background: #F5F0EB; color: #78716C; }
-    .badge-storniert       { background: #FEE2E2; color: #B91C1C; }
-    .badge-abgelehnt       { background: #FEE2E2; color: #B91C1C; }
-
-    .badge-eingang { background: #DBEAFE; color: #1D4ED8; }
-    .badge-ausgang { background: #FEF3C7; color: #B45309; }
-    .badge-intern  { background: #F3F4F6; color: #4B5563; }
-
-    .badge-dringend { background: #FEE2E2; color: #B91C1C; }
-    .badge-hoch     { background: #FEF3C7; color: #B45309; }
-    .badge-normal   { background: #F1F5F9; color: #64748B; }
-    .badge-niedrig  { background: #F0FDF4; color: #166534; }
-
-    /* ── DETAIL PANEL ── */
-    .detail-panel {
-      width: 370px;
-      background: white;
+    /* ── PREVIEW PANEL ── */
+    .preview-panel {
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 430px;
+      background: #fff;
       border-left: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      flex-shrink: 0;
+      box-shadow: -4px 0 20px rgba(0,0,0,.08);
       transform: translateX(100%);
       transition: transform .25s cubic-bezier(.4,0,.2,1);
+      z-index: 10;
     }
+    .preview-panel.open { transform: translateX(0); }
 
-    .detail-panel.open { transform: translateX(0); }
-
-    .detail-header {
-      padding: 14px 18px;
+    .prev-head {
+      padding: 12px 14px;
       border-bottom: 1px solid var(--border);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+      align-items: flex-start;
+      gap: 8px;
+      flex-shrink: 0;
     }
-
-    .detail-header h2 { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .prev-title { font-size: 14px; font-weight: 600; flex: 1; line-height: 1.3; }
+    .prev-nr { font-size: 11px; font-family: monospace; color: var(--muted); margin-top: 2px; }
 
     .btn-icon {
-      width: 28px;
-      height: 28px;
+      width: 26px; height: 26px;
       border: none;
       background: var(--bg);
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--muted);
-      font-size: 15px;
+      font-size: 14px;
       flex-shrink: 0;
-      transition: background .1s;
+      font-family: inherit;
     }
-
     .btn-icon:hover { background: var(--border); color: var(--text); }
 
-    .detail-body { flex: 1; overflow-y: auto; padding: 16px 18px; }
-
-    .detail-section { margin-bottom: 18px; }
-
-    .detail-section-title {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: 8px;
+    .prev-file {
+      background: #1E293B;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
     }
+    #prevIframe { width: 100%; height: 100%; border: none; display: none; }
+    #prevImg { max-width: 100%; max-height: 100%; object-fit: contain; display: none; }
+    .prev-no-file { text-align: center; color: #64748B; }
+    .prev-no-file svg { width: 34px; margin: 0 auto 10px; display: block; opacity: .35; }
+    .prev-no-file p { font-size: 12px; }
+
+    .prev-tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      padding: 0 4px;
+      flex-shrink: 0;
+    }
+    .prev-tab {
+      padding: 7px 13px;
+      border: none;
+      background: none;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      font-family: inherit;
+    }
+    .prev-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    .prev-content { flex: 1; overflow-y: auto; }
+    .prev-pane { padding: 13px 15px; display: none; }
+    .prev-pane.show { display: block; }
 
     .detail-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
       padding: 6px 0;
       border-bottom: 1px solid var(--border);
       font-size: 13px;
-      gap: 12px;
+      gap: 10px;
+      align-items: center;
     }
-
     .detail-row:last-child { border-bottom: none; }
-    .detail-row-label { color: var(--muted); flex-shrink: 0; }
-    .detail-row-value { text-align: right; font-weight: 500; color: var(--text); }
+    .dr-lbl { color: var(--muted); flex-shrink: 0; font-size: 12px; }
+    .dr-val { font-weight: 500; text-align: right; }
 
-    .detail-actions {
-      padding: 14px 18px;
+    .prev-ocr { font-size: 12px; font-family: monospace; white-space: pre-wrap; word-break: break-word; line-height: 1.6; background: var(--bg); padding: 12px; border-radius: 7px; }
+
+    .status-sel { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .st-opt { padding: 2px 8px; border-radius: 9px; font-size: 11px; font-weight: 500; cursor: pointer; border: 2px solid transparent; font-family: inherit; }
+    .st-opt.cur { border-color: currentColor; }
+    .st-opt:hover { opacity: .8; }
+
+    .prev-actions {
+      padding: 10px 15px;
       border-top: 1px solid var(--border);
       display: flex;
-      flex-wrap: wrap;
       gap: 7px;
+      flex-shrink: 0;
     }
-
-    .btn-secondary {
-      padding: 7px 13px;
+    .btn-sec {
+      padding: 6px 11px;
       border: 1px solid var(--border);
-      background: white;
-      border-radius: 7px;
+      background: #fff;
+      border-radius: 6px;
       font-size: 12px;
       cursor: pointer;
       color: var(--text);
       display: flex;
       align-items: center;
-      gap: 5px;
-      transition: background .1s;
+      gap: 4px;
       font-family: inherit;
     }
-
-    .btn-secondary:hover { background: var(--bg); }
-
-    .verlauf-item {
-      display: flex;
-      gap: 10px;
-      padding: 7px 0;
-      font-size: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .verlauf-item:last-child { border-bottom: none; }
-
-    .verlauf-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--primary);
-      flex-shrink: 0;
-      margin-top: 3px;
-    }
-
-    .file-link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 12px;
-      background: var(--bg);
-      border-radius: 8px;
-      font-size: 13px;
-      color: var(--primary);
-      text-decoration: none;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: all .15s;
-      overflow: hidden;
-    }
-
-    .file-link:hover { background: var(--primary-light); border-color: var(--primary); }
-    .file-link span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    .status-selector { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
-
-    .status-option {
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: border-color .15s, opacity .15s;
-      user-select: none;
-    }
-
-    .status-option:hover { opacity: .8; }
-    .status-option.selected { border-color: currentColor; }
+    .btn-sec:hover { background: var(--bg); }
 
     /* ── MODAL ── */
     .modal-overlay {
@@ -496,110 +381,108 @@
       pointer-events: none;
       transition: opacity .2s;
     }
-
     .modal-overlay.open { opacity: 1; pointer-events: all; }
 
     .modal {
-      background: white;
-      border-radius: 14px;
-      width: 600px;
+      background: #fff;
+      border-radius: 12px;
+      width: 590px;
       max-width: 96vw;
       max-height: 92vh;
       display: flex;
       flex-direction: column;
       box-shadow: var(--shadow-lg);
-      transform: scale(.96) translateY(10px);
+      transform: scale(.96);
       transition: transform .2s;
     }
+    .modal-overlay.open .modal { transform: scale(1); }
 
-    .modal-overlay.open .modal { transform: scale(1) translateY(0); }
-
-    .modal-header {
-      padding: 18px 22px 14px;
+    .modal-head {
+      padding: 15px 18px 11px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
+    .modal-head h2 { font-size: 15px; font-weight: 600; }
+    .modal-body { flex: 1; overflow-y: auto; padding: 15px 18px; }
+    .modal-foot { padding: 11px 18px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
 
-    .modal-header h2 { font-size: 16px; font-weight: 600; }
-
-    .modal-body { flex: 1; overflow-y: auto; padding: 18px 22px; }
-
-    .modal-footer {
-      padding: 14px 22px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    /* ── DROP ZONE (modal) ── */
-    .modal-drop-zone {
+    /* Drop zone */
+    .drop-zone {
       border: 2px dashed var(--border);
-      border-radius: 10px;
-      padding: 28px;
+      border-radius: 9px;
+      padding: 22px;
       text-align: center;
       cursor: pointer;
-      transition: all .2s;
       color: var(--muted);
-      margin-bottom: 18px;
+      margin-bottom: 14px;
+      transition: all .2s;
     }
+    .drop-zone:hover, .drop-zone.drag-over { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+    .drop-zone svg { width: 30px; margin: 0 auto 7px; display: block; }
+    .drop-zone p { font-size: 13px; margin-bottom: 2px; }
+    .drop-zone small { font-size: 11px; }
 
-    .modal-drop-zone:hover, .modal-drop-zone.drag-over {
-      border-color: var(--primary);
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-
-    .modal-drop-zone svg { width: 34px; height: 34px; margin: 0 auto 10px; display: block; }
-    .modal-drop-zone p { font-size: 14px; margin-bottom: 3px; }
-    .modal-drop-zone small { font-size: 12px; }
-
-    .file-selected-box {
-      display: flex;
+    .file-box {
+      display: none;
       align-items: center;
-      gap: 10px;
-      padding: 10px 13px;
+      gap: 8px;
+      padding: 8px 11px;
       background: var(--primary-light);
       border: 1px solid var(--primary);
-      border-radius: 8px;
-      margin-bottom: 18px;
-    }
-
-    .file-selected-box svg { color: var(--primary); width: 18px; height: 18px; flex-shrink: 0; }
-    .file-selected-box span { font-size: 13px; font-weight: 500; color: var(--primary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .file-selected-box button { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 16px; line-height: 1; padding: 2px; }
-    .file-selected-box button:hover { color: #EF4444; }
-
-    /* ── FORM ── */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
-    .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-group.full { grid-column: 1 / -1; }
-
-    label { font-size: 12px; font-weight: 500; color: var(--muted); }
-
-    input, select, textarea {
-      padding: 8px 11px;
-      border: 1px solid var(--border);
       border-radius: 7px;
+      margin-bottom: 14px;
+    }
+    .file-box svg { color: var(--primary); width: 16px; flex-shrink: 0; }
+    .file-box span { font-size: 13px; font-weight: 500; color: var(--primary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-box button { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 17px; line-height: 1; }
+    .file-box button:hover { color: #EF4444; }
+
+    /* OCR */
+    .ocr-row { display: none; align-items: center; gap: 8px; margin-bottom: 13px; flex-wrap: wrap; }
+    .btn-ocr {
+      padding: 5px 12px;
+      border: 1px solid #7C3AED;
+      background: #F5F3FF;
+      color: #5B21B6;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+    }
+    .btn-ocr:hover { background: #EDE9FE; }
+    .btn-ocr:disabled { opacity: .6; cursor: not-allowed; }
+    .ocr-hint { font-size: 11px; color: var(--muted); }
+
+    .ocr-box { display: none; margin-bottom: 13px; background: #FAFAF9; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }
+    .ocr-box details summary { padding: 8px 12px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; }
+    .ocr-box pre { padding: 0 12px 10px; font-size: 11px; font-family: monospace; white-space: pre-wrap; max-height: 150px; overflow-y: auto; line-height: 1.5; }
+
+    /* Form */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 13px; }
+    .fg { display: flex; flex-direction: column; gap: 3px; }
+    .fg.full { grid-column: 1 / -1; }
+    label { font-size: 11px; font-weight: 500; color: var(--muted); }
+    input, select, textarea {
+      padding: 6px 9px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
       font-size: 13px;
       color: var(--text);
       outline: none;
-      background: white;
+      background: #fff;
       font-family: inherit;
-      transition: border-color .15s, box-shadow .15s;
     }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+    textarea { resize: vertical; min-height: 60px; }
 
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37,99,235,.1);
-    }
-
-    textarea { resize: vertical; min-height: 72px; }
-
-    /* ── GLOBAL DRAG OVERLAY ── */
-    .global-drag-overlay {
+    /* Global drag overlay */
+    .g-drag {
       position: fixed;
       inset: 0;
       background: rgba(37,99,235,.88);
@@ -611,388 +494,228 @@
       pointer-events: none;
       transition: opacity .15s;
     }
+    .g-drag.on { opacity: 1; pointer-events: all; }
+    .drag-msg { text-align: center; color: #fff; pointer-events: none; }
+    .drag-msg svg { width: 52px; margin: 0 auto 13px; display: block; }
+    .drag-msg h2 { font-size: 22px; font-weight: 700; }
+    .drag-msg p { font-size: 13px; opacity: .8; margin-top: 5px; }
 
-    .global-drag-overlay.active { opacity: 1; pointer-events: all; }
-
-    .drag-message {
-      text-align: center;
-      color: white;
-      pointer-events: none;
-    }
-
-    .drag-message svg { width: 64px; height: 64px; margin: 0 auto 16px; display: block; opacity: .85; }
-    .drag-message h2 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
-    .drag-message p { font-size: 15px; opacity: .8; }
-
-    /* ── LOADING / EMPTY ── */
-    .loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 60px;
-      color: var(--muted);
-      font-size: 14px;
-      gap: 10px;
-    }
-
-    .spinner {
-      width: 20px; height: 20px;
-      border: 2px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      flex-shrink: 0;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--muted);
-    }
-
-    .empty-state svg { width: 44px; height: 44px; margin: 0 auto 14px; display: block; opacity: .35; }
-    .empty-state h3 { font-size: 15px; color: var(--text); margin-bottom: 5px; }
-    .empty-state p { font-size: 13px; }
-
-    /* ── TOAST ── */
+    /* Toast */
     .toast {
       position: fixed;
-      bottom: 22px;
-      right: 22px;
+      bottom: 18px;
+      right: 18px;
       background: #1E293B;
-      color: white;
-      padding: 11px 18px;
-      border-radius: 10px;
+      color: #fff;
+      padding: 9px 15px;
+      border-radius: 8px;
       font-size: 13px;
       z-index: 300;
-      transform: translateY(80px);
+      transform: translateY(60px);
       opacity: 0;
-      transition: all .3s cubic-bezier(.4,0,.2,1);
-      max-width: 320px;
+      transition: all .28s;
+      max-width: 300px;
     }
-
     .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.success { background: #059669; }
-    .toast.error { background: #DC2626; }
+    .toast.ok { background: #059669; }
+    .toast.err { background: #DC2626; }
 
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 5px; }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.25);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .65s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
-
-    /* ── PROGRESS BAR (upload) ── */
-    .upload-progress {
-      height: 4px;
-      background: var(--border);
-      border-radius: 2px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .upload-progress-bar {
-      height: 100%;
-      background: var(--primary);
-      border-radius: 2px;
-      transition: width .3s;
-      width: 0%;
-    }
-
-    /* ── OCR ── */
-    .ocr-row {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .btn-ocr {
-      padding: 7px 14px;
-      border: 1px solid #7C3AED;
-      background: #F5F3FF;
-      color: #5B21B6;
-      border-radius: 7px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: inherit;
-      transition: background .15s;
-      white-space: nowrap;
-    }
-
-    .btn-ocr:hover { background: #EDE9FE; }
-    .btn-ocr:disabled { opacity: .6; cursor: not-allowed; }
-
-    .ocr-hint { font-size: 11px; color: var(--muted); }
-
-    .ocr-box {
-      display: none;
-      background: #FAFAF9;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
-
-    .ocr-summary {
-      padding: 9px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      cursor: pointer;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      list-style: none;
-    }
-
-    .ocr-summary:hover { color: var(--text); }
-
-    .ocr-pre {
-      padding: 0 14px 12px;
-      font-size: 11px;
-      font-family: monospace;
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: var(--text);
-      line-height: 1.6;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    /* ── SETTINGS MODAL ── */
-    .settings-modal {
-      max-width: 460px;
-    }
-
-    .settings-section {
-      margin-bottom: 20px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .settings-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-
-    .settings-section h3 {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .key-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: 8px;
-      font-weight: 500;
-    }
-
-    .key-status.set { background: #D1FAE5; color: #065F46; }
-    .key-status.missing { background: #FEE2E2; color: #B91C1C; }
-
-    .settings-help {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 6px;
-      line-height: 1.5;
-    }
-
-    .settings-help a { color: var(--primary); }
   </style>
 </head>
 <body>
 
-<!-- Global Drag Overlay -->
-<div class="global-drag-overlay" id="globalDragOverlay">
-  <div class="drag-message">
+<!-- Global drag overlay -->
+<div class="g-drag" id="gDrag">
+  <div class="drag-msg">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
     </svg>
     <h2>Dokument ablegen</h2>
-    <p>Datei loslassen, um ein neues Dokument anzulegen</p>
+    <p>PDF, Word, Excel, Bilder, E-Mail, Text, WhatsApp …</p>
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- ── HEADER ── -->
+<!-- Header -->
 <header>
   <div class="logo">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
     </svg>
     Dokumentenmanagement
   </div>
-
   <div class="search-wrap">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-    </svg>
-    <input type="search" id="suche" placeholder="Titel, Nummer, Absender, Projekt …">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="search" id="suche" placeholder="Suchen …">
   </div>
-
-  <div class="header-right">
-    <button class="btn-icon" id="btnSettings" title="Einstellungen" style="width:34px;height:34px;background:var(--bg)">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-        <circle cx="12" cy="12" r="3"/>
-      </svg>
-    </button>
-    <button class="btn-primary" id="btnNeu">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-        <path stroke-linecap="round" d="M12 5v14M5 12h14"/>
-      </svg>
-      Neues Dokument
-    </button>
-  </div>
+  <button class="btn-primary" id="btnNeu">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+    Neues Dokument
+  </button>
 </header>
 
-<!-- ── APP BODY ── -->
+<!-- App body -->
 <div class="app-body">
 
   <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-section">
+  <aside>
+    <div class="sb-sec">
       <h3>Übersicht</h3>
       <div class="stat-grid">
-        <div class="stat-card"><span class="stat-number" id="statGesamt">–</span><span class="stat-label">Gesamt</span></div>
-        <div class="stat-card"><span class="stat-number" id="statEingang">–</span><span class="stat-label">Eingang</span></div>
-        <div class="stat-card"><span class="stat-number" id="statAusgang">–</span><span class="stat-label">Ausgang</span></div>
-        <div class="stat-card"><span class="stat-number" id="statOffen">–</span><span class="stat-label">Offen</span></div>
+        <div class="stat-card"><span class="stat-num" id="sGes">–</span><span class="stat-lbl">Gesamt</span></div>
+        <div class="stat-card"><span class="stat-num" id="sEin">–</span><span class="stat-lbl">Eingang</span></div>
+        <div class="stat-card"><span class="stat-num" id="sAus">–</span><span class="stat-lbl">Ausgang</span></div>
+        <div class="stat-card"><span class="stat-num" id="sOff">–</span><span class="stat-lbl">Offen</span></div>
       </div>
     </div>
-
-    <div class="sidebar-section">
+    <div class="sb-sec">
       <h3>Status</h3>
       <div id="statusFilter"></div>
     </div>
-
-    <div class="sidebar-section">
+    <div class="sb-sec">
       <h3>Priorität</h3>
-      <div id="prioritaetFilter"></div>
+      <div id="prioFilter"></div>
     </div>
-
-    <!-- Sidebar Drop Zone -->
-    <div class="drop-zone-sidebar" id="sidebarDropZone">
+    <div class="drop-sb" id="dropSb">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
       </svg>
-      <div>Datei hierher ziehen<br>oder klicken</div>
+      Datei ablegen oder klicken
     </div>
   </aside>
 
-  <!-- List Area -->
-  <div class="list-area">
-
-    <!-- Tabs -->
+  <!-- Main area -->
+  <div class="main-area">
     <div class="list-toolbar">
-      <button class="tab-btn active" data-richtung="">
-        Alle <span class="tab-count" id="cntAlle">–</span>
-      </button>
-      <button class="tab-btn" data-richtung="eingang">
-        ↙ Eingang <span class="tab-count" id="cntEingang">–</span>
-      </button>
-      <button class="tab-btn" data-richtung="ausgang">
-        ↗ Ausgang <span class="tab-count" id="cntAusgang">–</span>
-      </button>
-      <button class="tab-btn" data-richtung="intern">
-        ● Intern <span class="tab-count" id="cntIntern">–</span>
-      </button>
+      <button class="tab active" data-r="">Alle <span class="tab-cnt" id="cAll">–</span></button>
+      <button class="tab" data-r="eingang">↙ Eingang <span class="tab-cnt" id="cIn">–</span></button>
+      <button class="tab" data-r="ausgang">↗ Ausgang <span class="tab-cnt" id="cOut">–</span></button>
+      <button class="tab" data-r="intern">● Intern <span class="tab-cnt" id="cInt">–</span></button>
     </div>
-
-    <!-- Document List -->
-    <div id="dokumentListe">
-      <div class="loading"><div class="spinner"></div>Dokumente werden geladen …</div>
+    <div class="table-wrap">
+      <table class="dok-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="sortable" data-col="dokumentnummer">Nr. <span class="sort-ind">↕</span></th>
+            <th class="sortable" data-col="titel">Titel <span class="sort-ind">↕</span></th>
+            <th class="sortable" data-col="kategorie">Kategorie <span class="sort-ind">↕</span></th>
+            <th class="sortable" data-col="status">Status <span class="sort-ind">↕</span></th>
+            <th>Von / An</th>
+            <th class="sortable" data-col="dokumentdatum">Datum <span class="sort-ind">↕</span></th>
+            <th class="sortable" data-col="faelligkeitsdatum">Fällig <span class="sort-ind">↕</span></th>
+            <th class="sortable" data-col="betrag" style="text-align:right">Betrag <span class="sort-ind">↕</span></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tBody">
+          <tr><td colspan="10" style="text-align:center;padding:50px;color:var(--muted)"><span class="spinner" style="border-top-color:var(--primary);border-color:rgba(37,99,235,.2)"></span></td></tr>
+        </tbody>
+      </table>
     </div>
-
   </div>
 
-  <!-- Detail Panel -->
-  <div class="detail-panel" id="detailPanel">
-    <div class="detail-header">
-      <h2 id="detailTitel">–</h2>
-      <button class="btn-icon" id="btnSchliessen" title="Schließen">✕</button>
+  <!-- Preview panel -->
+  <div class="preview-panel" id="prevPanel">
+    <div class="prev-head">
+      <div>
+        <div class="prev-title" id="prevTitle">–</div>
+        <div class="prev-nr" id="prevNr"></div>
+      </div>
+      <button class="btn-icon" id="btnPrevClose">✕</button>
     </div>
-    <div class="detail-body" id="detailBody"></div>
-    <div class="detail-actions" id="detailActions"></div>
+
+    <div class="prev-file" id="prevFile">
+      <iframe id="prevIframe" src="" title="Vorschau"></iframe>
+      <img id="prevImg" src="" alt="Vorschau">
+      <div class="prev-no-file" id="prevNoFile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <p id="prevNoTxt">Kein Anhang</p>
+      </div>
+    </div>
+
+    <div class="prev-tab-bar">
+      <button class="prev-tab active" data-t="details">Details</button>
+      <button class="prev-tab" data-t="volltext">Volltext</button>
+    </div>
+
+    <div class="prev-content">
+      <div class="prev-pane show" id="paneDetails"></div>
+      <div class="prev-pane" id="paneVolltext">
+        <pre class="prev-ocr" id="ocrVolltext">Kein OCR-Text vorhanden.</pre>
+      </div>
+    </div>
+
+    <div class="prev-actions" id="prevActions"></div>
   </div>
 
 </div>
 
-<!-- ── MODAL ── -->
-<div class="modal-overlay" id="modalOverlay">
+<!-- New document modal -->
+<div class="modal-overlay" id="modalOv">
   <div class="modal">
-    <div class="modal-header">
-      <h2>Neues Dokument anlegen</h2>
-      <button class="btn-icon" id="btnModalClose">✕</button>
+    <div class="modal-head">
+      <h2>Neues Dokument</h2>
+      <button class="btn-icon" id="btnMClose">✕</button>
     </div>
     <div class="modal-body">
 
-      <!-- Drop Zone -->
-      <div class="modal-drop-zone" id="modalDropZone">
+      <div class="drop-zone" id="dropZone">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
         </svg>
-        <p><strong>Datei hier ablegen</strong> oder klicken zum Auswählen</p>
-        <small>PDF, Word, Excel, Bilder · max. 50 MB</small>
-        <input type="file" id="fileInput" style="display:none"
-          accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.webp">
+        <p><strong>Datei ablegen</strong> oder hier klicken</p>
+        <small>Alle Formate: PDF, Word, Excel, Bilder, E-Mail, Text, WhatsApp …</small>
+        <input type="file" id="fileInput" accept="*/*" style="display:none">
       </div>
 
-      <div id="fileAnzeige" style="display:none" class="file-selected-box">
+      <div class="file-box" id="fileBox">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
-        <span id="fileNameAnzeige"></span>
-        <button onclick="dateiEntfernen()" title="Datei entfernen">×</button>
+        <span id="fileBoxName"></span>
+        <button onclick="dateiEntfernen()">×</button>
       </div>
 
-      <!-- OCR Row -->
       <div class="ocr-row" id="ocrRow">
         <button class="btn-ocr" id="btnOcr" onclick="fuehreOcrDurch()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
           </svg>
-          OCR analysieren
+          <span id="ocrBtnLbl">Analysieren</span>
         </button>
-        <span class="ocr-hint">Mistral liest die Datei und befüllt das Formular automatisch</span>
+        <span class="ocr-hint" id="ocrHint"></span>
       </div>
 
-      <!-- OCR Ergebnis -->
       <div class="ocr-box" id="ocrBox">
         <details>
-          <summary class="ocr-summary">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
-            OCR-Ergebnis (aufklappen)
-          </summary>
-          <pre class="ocr-pre" id="ocrText"></pre>
+          <summary>📄 Erkannter Text (aufklappen)</summary>
+          <pre id="ocrPre"></pre>
         </details>
       </div>
 
-      <form id="neuFormular" class="form-grid" onsubmit="return false">
-
-        <div class="form-group full">
+      <form id="neuForm" class="form-grid" onsubmit="return false">
+        <div class="fg full">
           <label>Titel *</label>
-          <input type="text" name="titel" required placeholder="z.B. Rechnung Müller GmbH August 2026">
+          <input type="text" name="titel" required placeholder="z.B. Rechnung Müller GmbH">
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Richtung</label>
           <select name="richtung">
             <option value="eingang">↙ Eingang</option>
@@ -1000,8 +723,7 @@
             <option value="intern">● Intern</option>
           </select>
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Status</label>
           <select name="status">
             <option value="entwurf">Entwurf</option>
@@ -1011,15 +733,11 @@
             <option value="archiviert">Archiviert</option>
           </select>
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Kategorie</label>
-          <select name="kategorie_id" id="selKategorie">
-            <option value="">— keine —</option>
-          </select>
+          <select name="kategorie_id" id="selKat"><option value="">—</option></select>
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Priorität</label>
           <select name="prioritaet">
             <option value="niedrig">Niedrig</option>
@@ -1028,51 +746,35 @@
             <option value="dringend">Dringend</option>
           </select>
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Projekt</label>
-          <select name="projekt_id" id="selProjekt">
-            <option value="">— kein —</option>
-          </select>
+          <select name="projekt_id" id="selProj"><option value="">—</option></select>
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Gewerk</label>
-          <select name="gewerk_id" id="selGewerk">
-            <option value="">— kein —</option>
-          </select>
+          <select name="gewerk_id" id="selGew"><option value="">—</option></select>
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Absender</label>
-          <select name="absender_id" id="selAbsender">
-            <option value="">— kein —</option>
-          </select>
+          <select name="absender_id" id="selAbs"><option value="">—</option></select>
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Empfänger</label>
-          <select name="empfaenger_id" id="selEmpfaenger">
-            <option value="">— kein —</option>
-          </select>
+          <select name="empfaenger_id" id="selEmp"><option value="">—</option></select>
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Dokumentdatum</label>
           <input type="date" name="dokumentdatum">
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Fälligkeitsdatum</label>
           <input type="date" name="faelligkeitsdatum">
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Betrag (EUR)</label>
           <input type="number" name="betrag" step="0.01" min="0" placeholder="0,00">
         </div>
-
-        <div class="form-group">
+        <div class="fg">
           <label>Vertraulichkeit</label>
           <select name="vertraulichkeit">
             <option value="intern">Intern</option>
@@ -1081,557 +783,571 @@
             <option value="streng_vertraulich">Streng vertraulich</option>
           </select>
         </div>
-
-        <div class="form-group full">
+        <div class="fg full">
           <label>Beschreibung</label>
-          <textarea name="beschreibung" placeholder="Kurze Beschreibung …"></textarea>
+          <textarea name="beschreibung" placeholder="…"></textarea>
         </div>
-
-        <div class="form-group full">
+        <div class="fg full">
           <label>Interne Notizen</label>
-          <textarea name="notizen" placeholder="Notizen für interne Verwendung …"></textarea>
+          <textarea name="notizen" placeholder="…"></textarea>
         </div>
-
       </form>
     </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" id="btnAbbrechen">Abbrechen</button>
-      <button class="btn-primary" id="btnSpeichern">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-        </svg>
+    <div class="modal-foot">
+      <button class="btn-sec" id="btnMAbb">Abbrechen</button>
+      <button class="btn-primary" id="btnSave">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
         Speichern
       </button>
     </div>
   </div>
 </div>
 
-<!-- ── SETTINGS MODAL ── -->
-<div class="modal-overlay" id="settingsOverlay">
-  <div class="modal settings-modal">
-    <div class="modal-header">
-      <h2>Einstellungen</h2>
-      <button class="btn-icon" id="btnSettingsClose">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="settings-section">
-        <h3>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
-          </svg>
-          Mistral OCR
-          <span class="key-status missing" id="mistralKeyStatus">Kein Key</span>
-        </h3>
-        <div class="form-group">
-          <label>API-Key</label>
-          <input type="password" id="inputMistralKey" placeholder="Mistral API-Key eingeben …" autocomplete="off">
-        </div>
-        <p class="settings-help">
-          Wird ausschließlich lokal im Browser gespeichert — nicht im Code oder GitHub.<br>
-          Key erstellen: <a href="https://console.mistral.ai/api-keys" target="_blank">console.mistral.ai/api-keys</a>
-        </p>
-        <p class="settings-help" style="margin-top:6px">
-          OCR funktioniert mit PDF-Dateien und Bildern (JPG, PNG, WebP). Word und Excel werden nicht unterstützt.
-        </p>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" id="btnSettingsAbbrechen">Abbrechen</button>
-      <button class="btn-primary" id="btnSettingsSpeichern">Speichern</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── SCRIPT ── -->
 <script>
+// ── CONSTANTS ──
 const SUPABASE_URL = 'https://xuuitgtnnphcwjzkaihc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1dWl0Z3RubnBoY3dqemthaWhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3Njk5MDYsImV4cCI6MjA5NzM0NTkwNn0.4MPIuF73kmZ9ZXfedNEcxXiSPQf4V-O6SxHLlksX6Qs';
-
+const OCR_URL = `${SUPABASE_URL}/functions/v1/ocr`;
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── STATE ──
-let alleDoks = [];
-let alleKontakte = [];
-let alleProjekte = [];
-let alleGewerke = [];
-let alleKats = [];
-let aktivRichtung = '';
-let aktivStatus = '';
-let aktivPrio = '';
-let suchtext = '';
-let gewaehlteId = null;
-let pendingFile = null;
+let alleDoks = [], alleKontakte = [], alleProjekte = [], alleGewerke = [], alleKats = [];
+let aktivR = '', aktivS = '', aktivP = '', suchtext = '';
+let gewId = null;
+let pendingFile = null, pendingOcrText = null;
+let sortCol = 'erstellt_am', sortAsc = false;
+
+const SL = { entwurf:'Entwurf', in_bearbeitung:'In Bearbeitung', freigegeben:'Freigegeben', versendet:'Versendet', archiviert:'Archiviert', storniert:'Storniert', abgelehnt:'Abgelehnt' };
+const RL = { eingang:'↙ Eingang', ausgang:'↗ Ausgang', intern:'● Intern' };
+const PL = { niedrig:'Niedrig', normal:'Normal', hoch:'Hoch', dringend:'Dringend' };
+const STATI = ['entwurf','in_bearbeitung','freigegeben','versendet','archiviert','storniert'];
 
 // ── HELPERS ──
-function esc(s) {
-  if (s == null) return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(s) { return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmt(d) { return d ? new Date(d).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}) : '–'; }
+function fmtB(b,w) { return b ? parseFloat(b).toLocaleString('de-DE',{minimumFractionDigits:2})+(w?' '+w:' EUR') : null; }
+function isOD(d) { return !!d && new Date(d) < new Date(); }
+function kName(k) { return k ? (k.firma || [k.vorname,k.nachname].filter(Boolean).join(' ') || null) : null; }
+
+function toast(msg, cls='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + cls;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.className = 'toast'; }, 3200);
 }
 
-function fmt(d) {
-  if (!d) return '–';
-  return new Date(d).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-}
-
-function fmtBetrag(b, w) {
-  if (!b) return null;
-  return parseFloat(b).toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' ' + (w || 'EUR');
-}
-
-function fmtSize(kb) {
-  if (!kb) return '';
-  return kb < 1024 ? kb + ' KB' : (kb / 1024).toFixed(1) + ' MB';
-}
-
-function isOverdue(d) { return !!d && new Date(d) < new Date(); }
-
-function kontaktName(k) {
-  if (!k) return null;
-  if (k.firma) return k.firma;
-  return [k.vorname, k.nachname].filter(Boolean).join(' ') || null;
-}
-
-const STATUS_LBL = {
-  entwurf: 'Entwurf', in_bearbeitung: 'In Bearbeitung', freigegeben: 'Freigegeben',
-  versendet: 'Versendet', archiviert: 'Archiviert', storniert: 'Storniert', abgelehnt: 'Abgelehnt'
-};
-
-const RICHTUNG_LBL = { eingang: '↙ Eingang', ausgang: '↗ Ausgang', intern: '● Intern' };
-const PRIO_LBL = { niedrig: 'Niedrig', normal: 'Normal', hoch: 'Hoch', dringend: 'Dringend' };
-
-function slbl(s) { return STATUS_LBL[s] || s; }
-function rlbl(r) { return RICHTUNG_LBL[r] || r; }
-function plbl(p) { return PRIO_LBL[p] || p; }
-
-function toast(msg, typ = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + typ;
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => { t.className = 'toast'; }, 3200);
-}
-
-// ── DATEN LADEN ──
+// ── DATA ──
 async function ladeAlles() {
-  const [docsR, konR, projR, gewR, katR] = await Promise.all([
-    sb.from('dokumente').select(`
-      *,
-      absender:kontakte!absender_id(id,firma,vorname,nachname),
-      empfaenger:kontakte!empfaenger_id(id,firma,vorname,nachname),
-      projekt:projekte(id,bezeichnung,auftragsnummer),
-      gewerk:gewerke(id,name),
-      kategorie:dokumentkategorien(id,name,farbe)
-    `).order('erstellt_am', { ascending: false }),
+  const [dR, kR, pR, gR, katR] = await Promise.all([
+    sb.from('dokumente').select(`*,absender:kontakte!absender_id(id,firma,vorname,nachname),empfaenger:kontakte!empfaenger_id(id,firma,vorname,nachname),projekt:projekte(id,bezeichnung,auftragsnummer),gewerk:gewerke(id,name),kategorie:dokumentkategorien(id,name)`).order('erstellt_am',{ascending:false}),
     sb.from('kontakte').select('id,firma,vorname,nachname,typ').order('firma'),
     sb.from('projekte').select('id,bezeichnung,auftragsnummer').order('bezeichnung'),
     sb.from('gewerke').select('id,name').order('name'),
-    sb.from('dokumentkategorien').select('id,name').order('name')
+    sb.from('dokumentkategorien').select('id,name').order('name'),
   ]);
-
-  if (docsR.error) { toast('Ladefehler: ' + docsR.error.message, 'error'); return; }
-
-  alleDoks = docsR.data || [];
-  alleKontakte = konR.data || [];
-  alleProjekte = projR.data || [];
-  alleGewerke = gewR.data || [];
+  if (dR.error) { toast('Ladefehler: '+dR.error.message,'err'); return; }
+  alleDoks = dR.data || [];
+  alleKontakte = kR.data || [];
+  alleProjekte = pR.data || [];
+  alleGewerke = gR.data || [];
   alleKats = katR.data || [];
-
   aktualisiereUI();
 }
 
-// ── UI AKTUALISIEREN ──
+// ── UI ──
 function aktualisiereUI() {
-  const gefiltert = filtere(alleDoks);
+  const gefiltert = sortiere(filtere(alleDoks));
 
-  document.getElementById('statGesamt').textContent  = alleDoks.length;
-  document.getElementById('statEingang').textContent = alleDoks.filter(d => d.richtung === 'eingang').length;
-  document.getElementById('statAusgang').textContent = alleDoks.filter(d => d.richtung === 'ausgang').length;
-  document.getElementById('statOffen').textContent   = alleDoks.filter(d => ['entwurf','in_bearbeitung','freigegeben'].includes(d.status)).length;
+  document.getElementById('sGes').textContent = alleDoks.length;
+  document.getElementById('sEin').textContent = alleDoks.filter(d=>d.richtung==='eingang').length;
+  document.getElementById('sAus').textContent = alleDoks.filter(d=>d.richtung==='ausgang').length;
+  document.getElementById('sOff').textContent = alleDoks.filter(d=>['entwurf','in_bearbeitung','freigegeben'].includes(d.status)).length;
+  document.getElementById('cAll').textContent = alleDoks.length;
+  document.getElementById('cIn').textContent  = alleDoks.filter(d=>d.richtung==='eingang').length;
+  document.getElementById('cOut').textContent = alleDoks.filter(d=>d.richtung==='ausgang').length;
+  document.getElementById('cInt').textContent = alleDoks.filter(d=>d.richtung==='intern').length;
 
-  document.getElementById('cntAlle').textContent    = alleDoks.length;
-  document.getElementById('cntEingang').textContent = alleDoks.filter(d => d.richtung === 'eingang').length;
-  document.getElementById('cntAusgang').textContent = alleDoks.filter(d => d.richtung === 'ausgang').length;
-  document.getElementById('cntIntern').textContent  = alleDoks.filter(d => d.richtung === 'intern').length;
-
-  renderStatusFilter();
-  renderPrioFilter();
+  renderSbFilter('statusFilter', STATI, s=>alleDoks.filter(d=>d.status===s).length, SL, aktivS, v=>{aktivS=aktivS===v?'':v; aktualisiereUI();});
+  renderSbFilter('prioFilter', ['dringend','hoch','normal','niedrig'], p=>alleDoks.filter(d=>d.prioritaet===p).length, PL, aktivP, v=>{aktivP=aktivP===v?'':v; aktualisiereUI();});
   fuellDropdowns();
-  renderListe(gefiltert);
+  renderTabelle(gefiltert);
 }
 
 function filtere(docs) {
   return docs.filter(d => {
-    if (aktivRichtung && d.richtung !== aktivRichtung) return false;
-    if (aktivStatus  && d.status    !== aktivStatus)   return false;
-    if (aktivPrio    && d.prioritaet!== aktivPrio)     return false;
+    if (aktivR && d.richtung !== aktivR) return false;
+    if (aktivS && d.status !== aktivS)   return false;
+    if (aktivP && d.prioritaet !== aktivP) return false;
     if (suchtext) {
       const q = suchtext.toLowerCase();
-      const hay = [d.titel, d.dokumentnummer, d.beschreibung, d.notizen,
-        kontaktName(d.absender), kontaktName(d.empfaenger),
-        d.projekt?.bezeichnung, d.gewerk?.name, d.kategorie?.name
-      ].join(' ').toLowerCase();
+      const hay = [d.titel,d.dokumentnummer,d.beschreibung,kName(d.absender),kName(d.empfaenger),d.projekt?.bezeichnung,d.gewerk?.name,d.kategorie?.name].join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
   });
 }
 
-function renderSidebarFilter(containerId, items, getKey, getLbl, aktiv, setAktiv) {
-  const el = document.getElementById(containerId);
-  el.innerHTML = items.map(item => {
-    const key = getKey(item);
-    const lbl = getLbl(item);
-    const cnt = alleDoks.filter(d => getKey(d) === key || d[Object.keys(d).find(k => d[k] === key)] === key).length;
-    const count = alleDoks.filter(d => {
-      if (containerId === 'statusFilter') return d.status === key;
-      if (containerId === 'prioritaetFilter') return d.prioritaet === key;
-      return false;
-    }).length;
-    const isActive = aktiv === key ? 'active' : '';
-    return `<button class="filter-btn ${isActive}" data-key="${esc(key)}">
-      <span>${esc(lbl)}</span>
-      <span class="filter-count">${count}</span>
-    </button>`;
-  }).join('');
-
-  el.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setAktiv(btn.dataset.key);
-      aktualisiereUI();
-    });
+function sortiere(docs) {
+  return [...docs].sort((a,b) => {
+    let av, bv;
+    if (sortCol === 'kategorie') { av = a.kategorie?.name; bv = b.kategorie?.name; }
+    else { av = a[sortCol]; bv = b[sortCol]; }
+    if (!av && !bv) return 0;
+    if (!av) return 1;
+    if (!bv) return -1;
+    const cmp = isNaN(Number(av)) ? String(av).localeCompare(String(bv),'de') : Number(av)-Number(bv);
+    return sortAsc ? cmp : -cmp;
   });
 }
 
-function renderStatusFilter() {
-  const statuses = ['entwurf','in_bearbeitung','freigegeben','versendet','archiviert'];
-  const el = document.getElementById('statusFilter');
-  el.innerHTML = statuses.map(s => {
-    const cnt = alleDoks.filter(d => d.status === s).length;
-    const isActive = aktivStatus === s ? 'active' : '';
-    return `<button class="filter-btn ${isActive}" data-key="${s}">
-      <span>${slbl(s)}</span><span class="filter-count">${cnt}</span>
-    </button>`;
-  }).join('');
-  el.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      aktivStatus = aktivStatus === btn.dataset.key ? '' : btn.dataset.key;
-      aktualisiereUI();
-    });
-  });
+function renderSbFilter(id, items, cnt, lblMap, aktiv, setFn) {
+  const el = document.getElementById(id);
+  el.innerHTML = items.map(k =>
+    `<button class="sb-btn${aktiv===k?' active':''}" data-k="${esc(k)}"><span>${esc(lblMap[k]||k)}</span><span class="sb-cnt">${cnt(k)}</span></button>`
+  ).join('');
+  el.querySelectorAll('.sb-btn').forEach(b => b.addEventListener('click', () => setFn(b.dataset.k)));
 }
 
-function renderPrioFilter() {
-  const prios = ['dringend','hoch','normal','niedrig'];
-  const el = document.getElementById('prioritaetFilter');
-  el.innerHTML = prios.map(p => {
-    const cnt = alleDoks.filter(d => d.prioritaet === p).length;
-    const isActive = aktivPrio === p ? 'active' : '';
-    return `<button class="filter-btn ${isActive}" data-key="${p}">
-      <span>${plbl(p)}</span><span class="filter-count">${cnt}</span>
-    </button>`;
-  }).join('');
-  el.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      aktivPrio = aktivPrio === btn.dataset.key ? '' : btn.dataset.key;
-      aktualisiereUI();
-    });
-  });
-}
-
-// ── DOKUMENT-LISTE ──
-function renderListe(docs) {
-  const el = document.getElementById('dokumentListe');
+// ── TABLE ──
+function renderTabelle(docs) {
+  const tb = document.getElementById('tBody');
   if (!docs.length) {
-    el.innerHTML = `<div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-      </svg>
-      <h3>Keine Dokumente gefunden</h3>
-      <p>Filter anpassen oder neues Dokument anlegen.</p>
-    </div>`;
+    tb.innerHTML = `<tr class="empty-row"><td colspan="10">Keine Dokumente gefunden.</td></tr>`;
     return;
   }
+  tb.innerHTML = docs.map(d => {
+    const od = isOD(d.faelligkeitsdatum);
+    const absN = kName(d.absender), empN = kName(d.empfaenger);
+    const vonAn = [absN && esc(absN), empN && esc(empN)].filter(Boolean).join(' → ') || '–';
+    const ri = {eingang:'<span style="color:#1D4ED8">↙</span>', ausgang:'<span style="color:#B45309">↗</span>', intern:'<span style="color:#4B5563">●</span>'}[d.richtung]||'';
+    const cls = [d.id===gewId?'sel':'', od?'overdue':''].filter(Boolean).join(' ');
+    return `<tr class="${cls}" data-id="${esc(d.id)}">
+      <td class="td-richtung">${ri}</td>
+      <td class="td-nr">${esc(d.dokumentnummer||'–')}</td>
+      <td class="td-titel" title="${esc(d.titel)}">${esc(d.titel)}</td>
+      <td>${d.kategorie ? `<span class="badge" style="background:#F1F5F9;color:#475569">${esc(d.kategorie.name)}</span>` : '<span style="color:var(--muted)">–</span>'}</td>
+      <td><span class="badge b-${esc(d.status)}">${esc(SL[d.status]||d.status)}</span></td>
+      <td style="font-size:12px;color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${vonAn}</td>
+      <td style="font-size:12px;white-space:nowrap">${fmt(d.dokumentdatum)}</td>
+      <td class="td-faellig${od?' red':''}">${d.faelligkeitsdatum?(od?'⚠ ':'')+fmt(d.faelligkeitsdatum):'–'}</td>
+      <td class="td-betrag">${d.betrag?esc(fmtB(d.betrag,d.waehrung)):''}</td>
+      <td class="td-ic">${d.dateipfad||d.dateiname?'📎':''}</td>
+    </tr>`;
+  }).join('');
 
-  el.innerHTML = docs.map(d => cardHTML(d)).join('');
-  el.querySelectorAll('.dok-card').forEach(card => {
-    card.addEventListener('click', () => zeigeDetail(card.dataset.id));
+  tb.querySelectorAll('tr[data-id]').forEach(tr => tr.addEventListener('click', () => zeigePreview(tr.dataset.id)));
+
+  document.querySelectorAll('.dok-table thead th.sortable').forEach(th => {
+    const col = th.dataset.col;
+    th.classList.toggle('sorted', col === sortCol);
+    const ind = th.querySelector('.sort-ind');
+    if (ind) ind.textContent = col === sortCol ? (sortAsc ? '↑' : '↓') : '↕';
   });
 }
 
-function cardHTML(d) {
-  const absN = kontaktName(d.absender);
-  const empN = kontaktName(d.empfaenger);
-  const betrag = fmtBetrag(d.betrag, d.waehrung);
-  const overdue = isOverdue(d.faelligkeitsdatum);
-  const sel = d.id === gewaehlteId ? 'selected' : '';
-  const prioBadge = d.prioritaet !== 'normal'
-    ? `<span class="badge badge-${esc(d.prioritaet)}">${plbl(d.prioritaet)}</span>` : '';
-
-  const faelligEl = d.faelligkeitsdatum
-    ? `<span class="dok-faellig${overdue ? ' overdue' : ''}">${overdue ? '⚠ ' : ''}${fmt(d.faelligkeitsdatum)}</span>`
-    : '';
-
-  return `<div class="dok-card ${sel}" data-id="${esc(d.id)}">
-    <div class="dok-card-left">
-      <div class="dok-card-top">
-        <span class="dok-nummer">${esc(d.dokumentnummer || '–')}</span>
-        <span class="badge badge-${esc(d.richtung)}">${rlbl(d.richtung)}</span>
-        <span class="badge badge-${esc(d.status)}">${slbl(d.status)}</span>
-        ${prioBadge}
-      </div>
-      <div class="dok-titel">${esc(d.titel)}</div>
-      <div class="dok-meta">
-        ${absN ? `<span>Von: ${esc(absN)}</span>` : ''}
-        ${empN ? `<span>An: ${esc(empN)}</span>` : ''}
-        ${d.projekt ? `<span>📁 ${esc(d.projekt.bezeichnung)}</span>` : ''}
-        ${d.gewerk  ? `<span>🔧 ${esc(d.gewerk.name)}</span>` : ''}
-        ${d.kategorie ? `<span>🏷 ${esc(d.kategorie.name)}</span>` : ''}
-        ${betrag ? `<span class="dok-betrag">${esc(betrag)}</span>` : ''}
-      </div>
-    </div>
-    <div class="dok-card-right">
-      ${faelligEl}
-      <span style="font-size:11px;color:var(--muted)">${fmt(d.dokumentdatum)}</span>
-      ${d.dateiname ? `<span title="${esc(d.dateiname)}" style="font-size:11px;color:var(--primary)">📎</span>` : ''}
-    </div>
-  </div>`;
-}
-
-// ── DETAIL PANEL ──
-async function zeigeDetail(id) {
-  gewaehlteId = id;
-  document.querySelectorAll('.dok-card').forEach(c => c.classList.toggle('selected', c.dataset.id === id));
+// ── PREVIEW PANEL ──
+async function zeigePreview(id) {
+  gewId = id;
+  document.querySelectorAll('#tBody tr[data-id]').forEach(r => r.classList.toggle('sel', r.dataset.id === id));
 
   const d = alleDoks.find(x => x.id === id);
   if (!d) return;
 
-  const panel = document.getElementById('detailPanel');
-  panel.classList.add('open');
-  document.getElementById('detailTitel').textContent = d.titel;
-  document.getElementById('detailBody').innerHTML = `<div class="loading"><div class="spinner"></div></div>`;
+  document.getElementById('prevPanel').classList.add('open');
+  document.getElementById('prevTitle').textContent = d.titel;
+  document.getElementById('prevNr').textContent = d.dokumentnummer || '';
 
-  // Verlauf laden
-  const { data: verlauf } = await sb.from('dokument_verlauf')
-    .select('*').eq('dokument_id', id).order('geaendert_am', { ascending: false });
+  // File preview
+  const iframe = document.getElementById('prevIframe');
+  const img    = document.getElementById('prevImg');
+  const noFile = document.getElementById('prevNoFile');
+  iframe.style.display = 'none'; iframe.src = '';
+  img.style.display    = 'none'; img.src    = '';
+  noFile.style.display = 'flex';
+  document.getElementById('prevNoTxt').textContent = 'Kein Anhang';
 
-  // Datei-Link
-  let dateiHTML = '';
   if (d.dateipfad) {
     const { data: urlData } = await sb.storage.from('dokumente').createSignedUrl(d.dateipfad, 3600);
     if (urlData?.signedUrl) {
-      dateiHTML = `<a href="${esc(urlData.signedUrl)}" target="_blank" class="file-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-        </svg>
-        <span>${esc(d.dateiname)}${d.dateigroesse_kb ? ' (' + fmtSize(d.dateigroesse_kb) + ')' : ''}</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-left:auto">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-        </svg>
-      </a>`;
+      const url = urlData.signedUrl;
+      const type = d.dateityp || '';
+      if (type === 'application/pdf') {
+        iframe.src = url; iframe.style.display = 'block'; noFile.style.display = 'none';
+      } else if (type.startsWith('image/')) {
+        img.src = url; img.style.display = 'block'; noFile.style.display = 'none';
+      } else {
+        document.getElementById('prevNoTxt').textContent = `📎 ${d.dateiname||'Anhang'} — Vorschau nicht möglich`;
+      }
     }
   } else if (d.dateiname) {
-    dateiHTML = `<div class="file-link" style="opacity:.5;cursor:default">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-      </svg>
-      <span>${esc(d.dateiname)} (kein Upload)</span>
-    </div>`;
+    document.getElementById('prevNoTxt').textContent = `📎 ${d.dateiname}`;
+  } else if (d.ocr_volltext) {
+    document.getElementById('prevNoTxt').textContent = 'OCR-Text verfügbar (Volltext-Tab)';
   }
 
-  const overdue = isOverdue(d.faelligkeitsdatum);
+  // Details
+  const od = isOD(d.faelligkeitsdatum);
+  const rows = [
+    ['Richtung',    `<span class="badge b-${esc(d.richtung)}">${esc(RL[d.richtung]||d.richtung)}</span>`],
+    ['Status',      `<span class="badge b-${esc(d.status)}">${esc(SL[d.status]||d.status)}</span>`],
+    ['Priorität',   esc(PL[d.prioritaet]||d.prioritaet||'–')],
+    d.kategorie && ['Kategorie', esc(d.kategorie.name)],
+    ['Absender',    esc(kName(d.absender)||'–')],
+    ['Empfänger',   esc(kName(d.empfaenger)||'–')],
+    d.projekt && ['Projekt', esc(d.projekt.bezeichnung+(d.projekt.auftragsnummer?` (${d.projekt.auftragsnummer})`:''))],
+    d.gewerk  && ['Gewerk',  esc(d.gewerk.name)],
+    ['Datum',       fmt(d.dokumentdatum)],
+    d.faelligkeitsdatum && ['Fällig', `<span style="${od?'color:#EF4444;font-weight:700':''}">${od?'⚠ ':''}${fmt(d.faelligkeitsdatum)}</span>`],
+    d.betrag && ['Betrag', `<span style="color:#059669;font-weight:700">${esc(fmtB(d.betrag,d.waehrung))}</span>`],
+    d.beschreibung && ['Beschreibung', `<span style="font-weight:400;font-size:12px;color:var(--muted)">${esc(d.beschreibung.slice(0,200))}</span>`],
+  ].filter(Boolean);
 
-  function row(label, value, extra = '') {
-    if (!value && value !== 0) return '';
-    return `<div class="detail-row">
-      <span class="detail-row-label">${esc(label)}</span>
-      <span class="detail-row-value" ${extra}>${value}</span>
-    </div>`;
-  }
+  document.getElementById('paneDetails').innerHTML =
+    rows.map(([l,v]) => `<div class="detail-row"><span class="dr-lbl">${l}</span><span class="dr-val">${v}</span></div>`).join('')
+    + `<div style="margin-top:14px">
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px">Status ändern</div>
+        <div class="status-sel">${STATI.map(s=>`<button class="badge b-${s} st-opt${d.status===s?' cur':''}" onclick="aendereStatus('${esc(d.id)}','${s}')">${SL[s]}</button>`).join('')}</div>
+       </div>`;
 
-  document.getElementById('detailBody').innerHTML = `
+  // Volltext
+  document.getElementById('ocrVolltext').textContent = d.ocr_volltext || 'Kein OCR-Text vorhanden.';
 
-    <div class="detail-section">
-      <div class="detail-section-title">Allgemein</div>
-      ${row('Nummer', `<span style="font-family:monospace">${esc(d.dokumentnummer||'–')}</span>`)}
-      ${row('Richtung', `<span class="badge badge-${esc(d.richtung)}">${rlbl(d.richtung)}</span>`)}
-      ${row('Status', `<span class="badge badge-${esc(d.status)}">${slbl(d.status)}</span>`)}
-      ${row('Priorität', `<span class="badge badge-${esc(d.prioritaet)}">${plbl(d.prioritaet)}</span>`)}
-      ${d.kategorie ? row('Kategorie', esc(d.kategorie.name)) : ''}
-      ${row('Vertraulichkeit', esc(d.vertraulichkeit))}
-    </div>
+  // Actions
+  document.getElementById('prevActions').innerHTML = d.dateipfad
+    ? `<button class="btn-sec" onclick="downloadDatei('${esc(d.dateipfad)}')">📥 Download</button>
+       <button class="btn-sec" onclick="loescheDokument('${esc(d.id)}')">🗑 Löschen</button>`
+    : `<button class="btn-sec" onclick="loescheDokument('${esc(d.id)}')">🗑 Löschen</button>`;
 
-    <div class="detail-section">
-      <div class="detail-section-title">Beteiligte</div>
-      ${row('Absender',  esc(kontaktName(d.absender)  || '–'))}
-      ${row('Empfänger', esc(kontaktName(d.empfaenger) || '–'))}
-      ${d.projekt ? row('Projekt', esc(d.projekt.bezeichnung + (d.projekt.auftragsnummer ? ' (' + d.projekt.auftragsnummer + ')' : ''))) : ''}
-      ${d.gewerk  ? row('Gewerk',  esc(d.gewerk.name)) : ''}
-    </div>
-
-    <div class="detail-section">
-      <div class="detail-section-title">Daten & Beträge</div>
-      ${row('Dokumentdatum', fmt(d.dokumentdatum))}
-      ${d.eingangsdatum ? row('Eingangsdatum', fmt(d.eingangsdatum)) : ''}
-      ${d.faelligkeitsdatum ? `<div class="detail-row">
-        <span class="detail-row-label">Fällig am</span>
-        <span class="detail-row-value" style="${overdue ? 'color:#EF4444;font-weight:700' : ''}">${fmt(d.faelligkeitsdatum)}${overdue ? ' ⚠' : ''}</span>
-      </div>` : ''}
-      ${d.betrag ? `<div class="detail-row">
-        <span class="detail-row-label">Betrag</span>
-        <span class="detail-row-value" style="color:#059669;font-weight:700">${esc(fmtBetrag(d.betrag, d.waehrung))}</span>
-      </div>` : ''}
-    </div>
-
-    ${d.beschreibung || d.notizen ? `<div class="detail-section">
-      <div class="detail-section-title">Beschreibung & Notizen</div>
-      ${d.beschreibung ? `<p style="font-size:13px;line-height:1.6;margin-bottom:10px">${esc(d.beschreibung)}</p>` : ''}
-      ${d.notizen ? `<p style="font-size:12px;color:var(--muted);background:var(--bg);padding:10px;border-radius:7px;line-height:1.6">${esc(d.notizen)}</p>` : ''}
-    </div>` : ''}
-
-    ${dateiHTML ? `<div class="detail-section">
-      <div class="detail-section-title">Anhang</div>
-      ${dateiHTML}
-    </div>` : ''}
-
-    <div class="detail-section">
-      <div class="detail-section-title">Status ändern</div>
-      <div class="status-selector">
-        ${['entwurf','in_bearbeitung','freigegeben','versendet','archiviert','storniert'].map(s => `
-          <button class="badge badge-${s} status-option${d.status===s?' selected':''}"
-            onclick="aendereStatus('${esc(d.id)}','${s}')">${slbl(s)}</button>
-        `).join('')}
-      </div>
-    </div>
-
-    ${verlauf?.length ? `<div class="detail-section">
-      <div class="detail-section-title">Verlauf</div>
-      ${verlauf.map(v => `<div class="verlauf-item">
-        <div class="verlauf-dot"></div>
-        <div>
-          <div style="font-weight:600">${v.alter_status ? slbl(v.alter_status) + ' → ' : ''}${slbl(v.neuer_status)}</div>
-          ${v.kommentar ? `<div style="color:var(--muted)">${esc(v.kommentar)}</div>` : ''}
-          <div style="color:var(--muted);font-size:11px">${new Date(v.geaendert_am).toLocaleString('de-DE')}</div>
-        </div>
-      </div>`).join('')}
-    </div>` : ''}
-  `;
-
-  document.getElementById('detailActions').innerHTML = `
-    <button class="btn-secondary" onclick="window.print()">🖨 Drucken</button>
-  `;
+  switchPrevTab('details');
 }
 
-async function aendereStatus(id, neuerStatus) {
-  const d = alleDoks.find(x => x.id === id);
-  const alterStatus = d?.status;
-  const { error } = await sb.from('dokumente').update({ status: neuerStatus, aktualisiert_am: new Date().toISOString() }).eq('id', id);
-  if (error) { toast('Fehler: ' + error.message, 'error'); return; }
-  await sb.from('dokument_verlauf').insert({ dokument_id: id, alter_status: alterStatus, neuer_status: neuerStatus });
-  toast('Status: ' + slbl(neuerStatus), 'success');
+function schliessePreview() {
+  document.getElementById('prevPanel').classList.remove('open');
+  gewId = null;
+  document.querySelectorAll('#tBody tr[data-id]').forEach(r => r.classList.remove('sel'));
+}
+
+async function downloadDatei(pfad) {
+  const { data } = await sb.storage.from('dokumente').createSignedUrl(pfad, 60);
+  if (data?.signedUrl) window.open(data.signedUrl, '_blank');
+}
+
+async function loescheDokument(id) {
+  if (!confirm('Dokument wirklich löschen?')) return;
+  const d = alleDoks.find(x=>x.id===id);
+  if (d?.dateipfad) await sb.storage.from('dokumente').remove([d.dateipfad]);
+  await sb.from('dokument_verlauf').delete().eq('dokument_id', id);
+  const { error } = await sb.from('dokumente').delete().eq('id', id);
+  if (error) { toast('Fehler: '+error.message,'err'); return; }
+  schliessePreview();
+  toast('Dokument gelöscht');
   await ladeAlles();
-  if (gewaehlteId) setTimeout(() => zeigeDetail(gewaehlteId), 100);
+}
+
+async function aendereStatus(id, neu) {
+  const alt = alleDoks.find(d=>d.id===id)?.status;
+  const { error } = await sb.from('dokumente').update({ status: neu, aktualisiert_am: new Date().toISOString() }).eq('id', id);
+  if (error) { toast('Fehler: '+error.message,'err'); return; }
+  await sb.from('dokument_verlauf').insert({ dokument_id: id, alter_status: alt, neuer_status: neu });
+  toast('Status: '+SL[neu],'ok');
+  await ladeAlles();
+  if (gewId) setTimeout(() => zeigePreview(gewId), 100);
+}
+
+function switchPrevTab(t) {
+  document.querySelectorAll('.prev-tab').forEach(b => b.classList.toggle('active', b.dataset.t === t));
+  document.getElementById('paneDetails').classList.toggle('show', t === 'details');
+  document.getElementById('paneVolltext').classList.toggle('show', t === 'volltext');
 }
 
 // ── DROPDOWNS ──
 function fuellDropdowns() {
-  const kOpts = alleKats.map(k => `<option value="${esc(k.id)}">${esc(k.name)}</option>`).join('');
-  const pOpts = alleProjekte.map(p => `<option value="${esc(p.id)}">${esc(p.bezeichnung)}${p.auftragsnummer?' ('+p.auftragsnummer+')':''}</option>`).join('');
-  const gOpts = alleGewerke.map(g => `<option value="${esc(g.id)}">${esc(g.name)}</option>`).join('');
-  const konOpts = alleKontakte.map(k => {
-    const name = k.firma || [k.vorname, k.nachname].filter(Boolean).join(' ');
-    return `<option value="${esc(k.id)}">${esc(name)}${k.typ ? ' ('+k.typ+')' : ''}</option>`;
-  }).join('');
-  const L = '<option value="">— keine —</option>';
-  document.getElementById('selKategorie').innerHTML  = L + kOpts;
-  document.getElementById('selProjekt').innerHTML    = L + pOpts;
-  document.getElementById('selGewerk').innerHTML     = L + gOpts;
-  document.getElementById('selAbsender').innerHTML   = L + konOpts;
-  document.getElementById('selEmpfaenger').innerHTML = L + konOpts;
+  const L = '<option value="">—</option>';
+  document.getElementById('selKat').innerHTML  = L + alleKats.map(k=>`<option value="${esc(k.id)}">${esc(k.name)}</option>`).join('');
+  document.getElementById('selProj').innerHTML = L + alleProjekte.map(p=>`<option value="${esc(p.id)}">${esc(p.bezeichnung)}${p.auftragsnummer?` (${p.auftragsnummer})`:''}</option>`).join('');
+  document.getElementById('selGew').innerHTML  = L + alleGewerke.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join('');
+  const kon = alleKontakte.map(k=>`<option value="${esc(k.id)}">${esc(k.firma||[k.vorname,k.nachname].filter(Boolean).join(' '))}${k.typ?` (${k.typ})`:''}</option>`).join('');
+  document.getElementById('selAbs').innerHTML = L + kon;
+  document.getElementById('selEmp').innerHTML = L + kon;
 }
 
 // ── MODAL ──
-function oeffneModal(datei = null) {
-  document.getElementById('neuFormular').reset();
+function oeffneModal(file = null) {
+  document.getElementById('neuForm').reset();
   dateiEntfernen();
-  document.querySelector('[name="dokumentdatum"]').value = new Date().toISOString().slice(0, 10);
-  if (datei) setDatei(datei);
-  document.getElementById('modalOverlay').classList.add('open');
+  pendingOcrText = null;
+  document.querySelector('[name="dokumentdatum"]').value = new Date().toISOString().slice(0,10);
+  if (file) setDatei(file);
+  document.getElementById('modalOv').classList.add('open');
 }
 
 function schliesseModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('modalOv').classList.remove('open');
   pendingFile = null;
+  pendingOcrText = null;
 }
 
 function setDatei(file) {
   pendingFile = file;
-  document.getElementById('fileAnzeige').style.display = 'flex';
-  document.getElementById('fileNameAnzeige').textContent = file.name + ' · ' + (file.size / 1024).toFixed(0) + ' KB';
-  document.getElementById('modalDropZone').style.display = 'none';
+  document.getElementById('fileBox').style.display = 'flex';
+  document.getElementById('fileBoxName').textContent = `${file.name}  ·  ${(file.size/1024).toFixed(0)} KB`;
+  document.getElementById('dropZone').style.display = 'none';
+  document.getElementById('ocrRow').style.display = 'flex';
   document.getElementById('ocrBox').style.display = 'none';
-  zeigeOcrButton();
+  const n = file.name.toLowerCase(), t = file.type;
+  const isPdfImg = t==='application/pdf' || t.startsWith('image/');
+  const isDocx = t.includes('wordprocessingml') || n.endsWith('.docx');
+  const isXlsx = t.includes('spreadsheetml') || n.endsWith('.xlsx') || n.endsWith('.xls');
+  if (isPdfImg) {
+    document.getElementById('ocrBtnLbl').textContent = 'OCR via Mistral';
+    document.getElementById('ocrHint').textContent = 'Mistral OCR liest die Datei und befüllt das Formular';
+  } else if (isDocx) {
+    document.getElementById('ocrBtnLbl').textContent = 'Text aus Word extrahieren';
+    document.getElementById('ocrHint').textContent = 'Läuft lokal — kein API-Key nötig';
+  } else if (isXlsx) {
+    document.getElementById('ocrBtnLbl').textContent = 'Daten aus Excel lesen';
+    document.getElementById('ocrHint').textContent = 'Läuft lokal — kein API-Key nötig';
+  } else {
+    document.getElementById('ocrBtnLbl').textContent = 'Analysieren';
+    document.getElementById('ocrHint').textContent = 'Text extrahieren und Formular befüllen';
+  }
 }
 
 function dateiEntfernen() {
   pendingFile = null;
-  document.getElementById('fileAnzeige').style.display = 'none';
-  document.getElementById('modalDropZone').style.display = 'block';
+  pendingOcrText = null;
+  document.getElementById('fileBox').style.display = 'none';
+  document.getElementById('dropZone').style.display = 'block';
   document.getElementById('fileInput').value = '';
   document.getElementById('ocrRow').style.display = 'none';
   document.getElementById('ocrBox').style.display = 'none';
 }
 
-async function naechsteNummer() {
-  const { data } = await sb.from('dokumente').select('dokumentnummer').order('erstellt_am', { ascending: false }).limit(1);
-  const last = data?.[0]?.dokumentnummer;
-  if (!last) return `DOK-${new Date().getFullYear()}-00001`;
-  const m = last.match(/(\d+)$/);
-  if (!m) return `DOK-${new Date().getFullYear()}-00001`;
-  return `DOK-${new Date().getFullYear()}-${String(parseInt(m[1]) + 1).padStart(5, '0')}`;
+// ── OCR / FILE EXTRACTION ──
+async function extrahiereText(file) {
+  const n = file.name.toLowerCase(), t = file.type;
+
+  // Textdateien direkt lesen
+  if (t.startsWith('text/') || ['.md','.eml','.csv','.html','.htm','.txt','.log','.json','.xml','.ics'].some(e=>n.endsWith(e))) {
+    return await leseAlsText(file);
+  }
+
+  // DOCX → mammoth.js
+  if (t.includes('wordprocessingml') || n.endsWith('.docx')) {
+    await ladeMammoth();
+    const r = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
+    return r.value;
+  }
+
+  // DOC (alt) → per Edge Function
+  if (n.endsWith('.doc')) return await ocrViaEdge(file);
+
+  // XLSX/XLS → SheetJS
+  if (t.includes('spreadsheetml') || n.endsWith('.xlsx') || n.endsWith('.xls')) {
+    await ladeXLSX();
+    const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+    return wb.SheetNames.map(sn => `=== ${sn} ===\n` + XLSX.utils.sheet_to_csv(wb.Sheets[sn])).join('\n\n');
+  }
+
+  // PDF + Bilder → Edge Function (Mistral OCR)
+  if (t === 'application/pdf' || t.startsWith('image/')) {
+    return await ocrViaEdge(file);
+  }
+
+  // Alles andere: erst als Text versuchen, sonst Edge Function
+  try {
+    const text = await leseAlsText(file);
+    if (text && text.trim().length > 10) return text;
+    return await ocrViaEdge(file);
+  } catch {
+    return await ocrViaEdge(file);
+  }
 }
 
+function leseAlsText(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.onerror = rej;
+    r.readAsText(file, 'UTF-8');
+  });
+}
+
+function dateiZuBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+async function ocrViaEdge(file) {
+  const base64 = await dateiZuBase64(file);
+  const res = await fetch(OCR_URL, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ base64, mimeType: file.type, filename: file.name }),
+  });
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error || `HTTP ${res.status}`); }
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data.text || '';
+}
+
+async function ladeMammoth() {
+  if (window.mammoth) return;
+  await new Promise((res,rej) => { const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+}
+
+async function ladeXLSX() {
+  if (window.XLSX) return;
+  await new Promise((res,rej) => { const s=document.createElement('script'); s.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+}
+
+async function fuehreOcrDurch() {
+  if (!pendingFile) return;
+  const btn = document.getElementById('btnOcr');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="border-top-color:#5B21B6;border-color:rgba(91,33,182,.2);width:12px;height:12px;border-width:2px"></span> Analysiere …';
+
+  try {
+    const text = await extrahiereText(pendingFile);
+    if (!text?.trim()) { toast('Kein Text erkannt','err'); return; }
+    pendingOcrText = text;
+    document.getElementById('ocrBox').style.display = 'block';
+    document.getElementById('ocrPre').textContent = text.length > 1000 ? text.slice(0,1000)+'\n…(gekürzt)' : text;
+    fuellFormular(text);
+    toast('Analysiert — Formular befüllt','ok');
+  } catch (err) {
+    toast('OCR-Fehler: '+err.message,'err');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg> <span id="ocrBtnLbl">${document.getElementById('ocrBtnLbl')?.textContent||'Analysieren'}</span>`;
+  }
+}
+
+function fuellFormular(text) {
+  const form = document.getElementById('neuForm');
+  const lower = text.toLowerCase();
+
+  // Typ erkennen
+  const typen = [
+    { kw:['rechnung','invoice'],              kat:'Rechnung',                r:'eingang' },
+    { kw:['mahnung','zahlungserinnerung'],     kat:'Mahnung',                 r:'eingang' },
+    { kw:['lieferschein','delivery note'],     kat:'Lieferschein',            r:'eingang' },
+    { kw:['angebot','quotation','offer'],      kat:'Angebot',                 r:'ausgang' },
+    { kw:['auftragsbestätigung','bestellung'], kat:'Auftragsbestätigung',     r:'ausgang' },
+    { kw:['baugenehmigung','genehmigung'],     kat:'Genehmigung',             r:'eingang' },
+    { kw:['mängelrüge','mangel','rüge'],       kat:'Mängelrüge',              r:'eingang' },
+    { kw:['vertrag','contract'],               kat:'Vertrag',                 r:'intern'  },
+    { kw:['aufmaß'],                           kat:'Aufmaß',                  r:'intern'  },
+    { kw:['stundenzettel','stunden'],          kat:'Stundenzettel',           r:'intern'  },
+    { kw:['zertifikat','prüfprotokoll'],       kat:'Zertifikat/Prüfprotokoll',r:'eingang' },
+    { kw:['sicherheitsdatenblatt'],            kat:'Sicherheitsdatenblatt',   r:'eingang' },
+  ];
+
+  let erkannt = null;
+  for (const { kw, kat, r } of typen) {
+    if (kw.some(w => lower.includes(w))) {
+      erkannt = kat;
+      const sel = document.getElementById('selKat');
+      for (const o of sel.options) { if (o.text.toLowerCase().startsWith(kat.toLowerCase())) { sel.value = o.value; break; } }
+      form.querySelector('[name="richtung"]').value = r;
+      break;
+    }
+  }
+
+  // Titel
+  const tf = form.querySelector('[name="titel"]');
+  if (!tf.value) {
+    const lines = text.split('\n').map(l => l.replace(/^#+\s*/,'').replace(/\*+/g,'').trim()).filter(l => l.length > 3 && l.length < 120);
+    tf.value = (lines[0] || erkannt || '').slice(0, 80);
+  }
+
+  // Betrag
+  const bf = form.querySelector('[name="betrag"]');
+  if (!bf.value) {
+    const matches = [...text.matchAll(/(\d{1,3}(?:[.,]\d{3})*[.,]\d{2})\s*(?:€|EUR)/gi)]
+      .map(m => parseFloat(m[1].replace(/\./g,'').replace(',','.'))).filter(n => !isNaN(n) && n > 0);
+    if (matches.length) bf.value = Math.max(...matches).toFixed(2);
+  }
+
+  // Datum
+  const df = form.querySelector('[name="dokumentdatum"]');
+  if (!df.value) {
+    const m = text.match(/\b(\d{2})[.\/-](\d{2})[.\/-](\d{4})\b/);
+    if (m) df.value = `${m[3]}-${m[2]}-${m[1]}`;
+  }
+
+  // Fälligkeit
+  const ff = form.querySelector('[name="faelligkeitsdatum"]');
+  if (!ff.value) {
+    const mf = text.match(/(?:zahlbar bis|fällig am|due date|zahlungsziel bis)[:\s]*(\d{2})[.\/-](\d{2})[.\/-](\d{4})/i);
+    if (mf) { ff.value = `${mf[3]}-${mf[2]}-${mf[1]}`; }
+    else {
+      const mz = text.match(/zahlungsziel[:\s]*(\d+)\s*tag/i);
+      if (mz && df.value) { const dt = new Date(df.value); dt.setDate(dt.getDate() + parseInt(mz[1])); ff.value = dt.toISOString().slice(0,10); }
+    }
+  }
+
+  // Beschreibung
+  const bF = form.querySelector('[name="beschreibung"]');
+  if (!bF.value) bF.value = text.replace(/#+/g,'').replace(/\*+/g,'').trim().slice(0,400);
+
+  // Kontakt-Match
+  for (const k of alleKontakte) {
+    const name = (k.firma || [k.vorname,k.nachname].filter(Boolean).join(' ')).toLowerCase().trim();
+    if (name.length < 4 || !lower.includes(name)) continue;
+    const richtung = form.querySelector('[name="richtung"]').value;
+    const selId = richtung === 'eingang' ? 'selAbs' : 'selEmp';
+    const sel = document.getElementById(selId);
+    for (const o of sel.options) { if (o.value === k.id) { sel.value = k.id; break; } }
+    break;
+  }
+}
+
+// ── SAVE ──
 async function speichereDokument() {
-  const form = document.getElementById('neuFormular');
+  const form = document.getElementById('neuForm');
   const fd = new FormData(form);
   const titel = fd.get('titel')?.trim();
-  if (!titel) { toast('Bitte Titel eingeben', 'error'); return; }
+  if (!titel) { toast('Titel eingeben','err'); return; }
 
-  const btn = document.getElementById('btnSpeichern');
-  btn.disabled = true;
-  btn.textContent = 'Speichern …';
+  const btn = document.getElementById('btnSave');
+  btn.disabled = true; btn.textContent = 'Speichern …';
 
   try {
     let dateipfad = null, dateiname = null, dateigroesse_kb = null, dateityp = null;
+    const dokumentnummer = await naechsteNummer();
 
     if (pendingFile) {
-      const nummer = await naechsteNummer();
       const ext = pendingFile.name.split('.').pop();
-      const pfad = `${nummer}_${Date.now()}.${ext}`;
+      const pfad = `${dokumentnummer.replace(/\//g,'-')}_${Date.now()}.${ext}`;
       const { error: upErr } = await sb.storage.from('dokumente').upload(pfad, pendingFile, { contentType: pendingFile.type });
       if (upErr) throw upErr;
-      dateipfad = pfad;
-      dateiname = pendingFile.name;
+      dateipfad = pfad; dateiname = pendingFile.name;
       dateigroesse_kb = Math.ceil(pendingFile.size / 1024);
       dateityp = pendingFile.type;
     }
 
-    const dokumentnummer = await naechsteNummer();
-
     const payload = {
-      dokumentnummer,
-      titel,
-      beschreibung:    fd.get('beschreibung')    || null,
-      notizen:         fd.get('notizen')          || null,
+      dokumentnummer, titel,
+      beschreibung:    fd.get('beschreibung') || null,
+      notizen:         fd.get('notizen') || null,
+      ocr_volltext:    pendingOcrText || null,
       richtung:        fd.get('richtung'),
       status:          fd.get('status'),
       prioritaet:      fd.get('prioritaet'),
       vertraulichkeit: fd.get('vertraulichkeit'),
-      kategorie_id:    fd.get('kategorie_id')    || null,
-      projekt_id:      fd.get('projekt_id')      || null,
-      gewerk_id:       fd.get('gewerk_id')       || null,
-      absender_id:     fd.get('absender_id')     || null,
-      empfaenger_id:   fd.get('empfaenger_id')   || null,
-      dokumentdatum:   fd.get('dokumentdatum')   || null,
+      kategorie_id:    fd.get('kategorie_id') || null,
+      projekt_id:      fd.get('projekt_id') || null,
+      gewerk_id:       fd.get('gewerk_id') || null,
+      absender_id:     fd.get('absender_id') || null,
+      empfaenger_id:   fd.get('empfaenger_id') || null,
+      dokumentdatum:   fd.get('dokumentdatum') || null,
       faelligkeitsdatum: fd.get('faelligkeitsdatum') || null,
       betrag:          fd.get('betrag') ? parseFloat(fd.get('betrag')) : null,
       waehrung:        'EUR',
@@ -1643,18 +1359,26 @@ async function speichereDokument() {
 
     await sb.from('dokument_verlauf').insert({ dokument_id: neu.id, neuer_status: payload.status, kommentar: 'Dokument angelegt' });
 
-    toast(dokumentnummer + ' gespeichert', 'success');
+    toast(dokumentnummer + ' gespeichert','ok');
     schliesseModal();
     await ladeAlles();
-    setTimeout(() => zeigeDetail(neu.id), 150);
+    setTimeout(() => zeigePreview(neu.id), 150);
 
   } catch (err) {
-    toast('Fehler: ' + err.message, 'error');
+    toast('Fehler: ' + err.message,'err');
     console.error(err);
   } finally {
     btn.disabled = false;
-    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Speichern`;
+    btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg> Speichern`;
   }
+}
+
+async function naechsteNummer() {
+  const { data } = await sb.from('dokumente').select('dokumentnummer').order('erstellt_am',{ascending:false}).limit(1);
+  const last = data?.[0]?.dokumentnummer;
+  if (!last) return `DOK-${new Date().getFullYear()}-00001`;
+  const m = last.match(/(\d+)$/);
+  return m ? `DOK-${new Date().getFullYear()}-${String(parseInt(m[1])+1).padStart(5,'0')}` : `DOK-${new Date().getFullYear()}-00001`;
 }
 
 // ── DRAG & DROP ──
@@ -1663,287 +1387,58 @@ let dragCnt = 0;
 document.addEventListener('dragenter', e => {
   if (!e.dataTransfer?.types?.includes('Files')) return;
   e.preventDefault();
-  if (++dragCnt === 1) document.getElementById('globalDragOverlay').classList.add('active');
+  if (++dragCnt === 1) document.getElementById('gDrag').classList.add('on');
 });
-
-document.addEventListener('dragleave', e => {
-  if (--dragCnt <= 0) { dragCnt = 0; document.getElementById('globalDragOverlay').classList.remove('active'); }
+document.addEventListener('dragleave', () => {
+  if (--dragCnt <= 0) { dragCnt = 0; document.getElementById('gDrag').classList.remove('on'); }
 });
-
 document.addEventListener('dragover', e => e.preventDefault());
-
 document.addEventListener('drop', e => {
-  e.preventDefault();
-  dragCnt = 0;
-  document.getElementById('globalDragOverlay').classList.remove('active');
+  e.preventDefault(); dragCnt = 0;
+  document.getElementById('gDrag').classList.remove('on');
   const file = e.dataTransfer?.files?.[0];
   if (file) oeffneModal(file);
 });
 
-// Modal Drop Zone
-const mdz = document.getElementById('modalDropZone');
-mdz.addEventListener('click', () => document.getElementById('fileInput').click());
-mdz.addEventListener('dragover',  e => { e.preventDefault(); e.stopPropagation(); mdz.classList.add('drag-over'); });
-mdz.addEventListener('dragleave', () => mdz.classList.remove('drag-over'));
-mdz.addEventListener('drop', e => {
-  e.preventDefault(); e.stopPropagation();
-  mdz.classList.remove('drag-over');
-  const file = e.dataTransfer?.files?.[0];
-  if (file) setDatei(file);
-});
+// Modal drop zone
+const dz = document.getElementById('dropZone');
+dz.addEventListener('click', () => document.getElementById('fileInput').click());
+dz.addEventListener('dragover', e => { e.preventDefault(); e.stopPropagation(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => { e.preventDefault(); e.stopPropagation(); dz.classList.remove('drag-over'); const f=e.dataTransfer?.files?.[0]; if(f) setDatei(f); });
+document.getElementById('fileInput').addEventListener('change', e => { if(e.target.files?.[0]) setDatei(e.target.files[0]); });
 
-document.getElementById('fileInput').addEventListener('change', e => {
-  if (e.target.files?.[0]) setDatei(e.target.files[0]);
-});
+// Sidebar drop
+const dsb = document.getElementById('dropSb');
+dsb.addEventListener('click', () => oeffneModal());
+dsb.addEventListener('dragover', e => { e.preventDefault(); e.stopPropagation(); dsb.classList.add('drag-over'); });
+dsb.addEventListener('dragleave', () => dsb.classList.remove('drag-over'));
+dsb.addEventListener('drop', e => { e.preventDefault(); e.stopPropagation(); dsb.classList.remove('drag-over'); const f=e.dataTransfer?.files?.[0]; if(f) oeffneModal(f); });
 
-// Sidebar Drop Zone
-const sdz = document.getElementById('sidebarDropZone');
-sdz.addEventListener('click',    () => oeffneModal());
-sdz.addEventListener('dragover',  e => { e.preventDefault(); e.stopPropagation(); sdz.classList.add('drag-over'); });
-sdz.addEventListener('dragleave', () => sdz.classList.remove('drag-over'));
-sdz.addEventListener('drop', e => {
-  e.preventDefault(); e.stopPropagation();
-  sdz.classList.remove('drag-over');
-  const file = e.dataTransfer?.files?.[0];
-  if (file) oeffneModal(file);
-});
-
-// ── TABS ──
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    aktivRichtung = btn.dataset.richtung;
-    aktualisiereUI();
-  });
-});
-
-// ── SUCHE ──
-document.getElementById('suche').addEventListener('input', e => {
-  suchtext = e.target.value;
-  aktualisiereUI();
-});
-
-// ── BUTTONS ──
+// ── EVENTS ──
+document.getElementById('suche').addEventListener('input', e => { suchtext = e.target.value; aktualisiereUI(); });
 document.getElementById('btnNeu').addEventListener('click', () => oeffneModal());
-document.getElementById('btnSpeichern').addEventListener('click', speichereDokument);
-document.getElementById('btnModalClose').addEventListener('click', schliesseModal);
-document.getElementById('btnAbbrechen').addEventListener('click', schliesseModal);
-document.getElementById('btnSchliessen').addEventListener('click', () => {
-  document.getElementById('detailPanel').classList.remove('open');
-  gewaehlteId = null;
-  document.querySelectorAll('.dok-card').forEach(c => c.classList.remove('selected'));
-});
-document.getElementById('modalOverlay').addEventListener('click', e => {
-  if (e.target.id === 'modalOverlay') schliesseModal();
-});
+document.getElementById('btnSave').addEventListener('click', speichereDokument);
+document.getElementById('btnMClose').addEventListener('click', schliesseModal);
+document.getElementById('btnMAbb').addEventListener('click', schliesseModal);
+document.getElementById('modalOv').addEventListener('click', e => { if(e.target.id==='modalOv') schliesseModal(); });
+document.getElementById('btnPrevClose').addEventListener('click', schliessePreview);
 
-// ── SETTINGS ──
-function mistralKey() { return localStorage.getItem('dms_mistral_key') || ''; }
+document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  aktivR = btn.dataset.r;
+  aktualisiereUI();
+}));
 
-function oeffneSettings() {
-  const key = mistralKey();
-  document.getElementById('inputMistralKey').value = key;
-  document.getElementById('mistralKeyStatus').textContent = key ? '✓ Gesetzt' : 'Kein Key';
-  document.getElementById('mistralKeyStatus').className = 'key-status ' + (key ? 'set' : 'missing');
-  document.getElementById('settingsOverlay').classList.add('open');
-}
+document.querySelectorAll('.prev-tab').forEach(btn => btn.addEventListener('click', () => switchPrevTab(btn.dataset.t)));
 
-function schliesseSettings() {
-  document.getElementById('settingsOverlay').classList.remove('open');
-}
-
-function speichereSettings() {
-  const key = document.getElementById('inputMistralKey').value.trim();
-  if (key) localStorage.setItem('dms_mistral_key', key);
-  else localStorage.removeItem('dms_mistral_key');
-  schliesseSettings();
-  toast(key ? 'Mistral API-Key gespeichert' : 'API-Key entfernt', 'success');
-}
-
-document.getElementById('btnSettings').addEventListener('click', oeffneSettings);
-document.getElementById('btnSettingsClose').addEventListener('click', schliesseSettings);
-document.getElementById('btnSettingsAbbrechen').addEventListener('click', schliesseSettings);
-document.getElementById('btnSettingsSpeichern').addEventListener('click', speichereSettings);
-document.getElementById('settingsOverlay').addEventListener('click', e => {
-  if (e.target.id === 'settingsOverlay') schliesseSettings();
-});
-
-// ── OCR ──
-function kannOcr(file) {
-  if (!file) return false;
-  return ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type);
-}
-
-function zeigeOcrButton() {
-  const visible = pendingFile && kannOcr(pendingFile) && mistralKey();
-  document.getElementById('ocrRow').style.display = visible ? 'flex' : 'none';
-}
-
-async function fuehreOcrDurch() {
-  const key = mistralKey();
-  if (!key) { toast('Mistral API-Key fehlt → Einstellungen ⚙️', 'error'); return; }
-  if (!pendingFile) return;
-
-  const btn = document.getElementById('btnOcr');
-  btn.disabled = true;
-  btn.innerHTML = `<div class="spinner" style="width:14px;height:14px;border-width:2px;flex-shrink:0"></div> Analysiere …`;
-
-  try {
-    const base64 = await dateiZuBase64(pendingFile);
-    const isImage = pendingFile.type.startsWith('image/');
-
-    const docField = isImage
-      ? { type: 'image_url',    image_url:    `data:${pendingFile.type};base64,${base64}` }
-      : { type: 'document_url', document_url: `data:${pendingFile.type};base64,${base64}` };
-
-    const res = await fetch('https://api.mistral.ai/v1/ocr', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'mistral-ocr-latest', document: docField })
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || err.error?.message || `HTTP ${res.status}`);
-    }
-
-    const data = await res.json();
-    const ocrText = (data.pages || []).map(p => p.markdown || '').join('\n\n').trim();
-
-    if (!ocrText) { toast('OCR: Kein Text erkannt', 'error'); return; }
-
-    zeigeOcrText(ocrText);
-    fuellFormularAusOcr(ocrText);
-    toast('OCR abgeschlossen — Formular wurde befüllt', 'success');
-
-  } catch (err) {
-    toast('OCR-Fehler: ' + err.message, 'error');
-    console.error(err);
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg> OCR analysieren`;
-  }
-}
-
-function dateiZuBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-function zeigeOcrText(text) {
-  const box = document.getElementById('ocrBox');
-  box.style.display = 'block';
-  document.getElementById('ocrText').textContent = text.length > 1000 ? text.slice(0, 1000) + '\n… (gekürzt)' : text;
-}
-
-function fuellFormularAusOcr(text) {
-  const form = document.getElementById('neuFormular');
-  const lower = text.toLowerCase();
-
-  // 1. Dokumenttyp erkennen → Kategorie + Richtung
-  const typMap = [
-    { kw: ['rechnung', 'invoice'],           kat: 'Rechnung',                  richtung: 'eingang' },
-    { kw: ['mahnung'],                        kat: 'Mahnung',                   richtung: 'eingang' },
-    { kw: ['lieferschein', 'delivery note'],  kat: 'Lieferschein',              richtung: 'eingang' },
-    { kw: ['angebot', 'quotation', 'quote'],  kat: 'Angebot',                   richtung: 'ausgang' },
-    { kw: ['auftragsbestätigung'],            kat: 'Auftragsbestätigung',       richtung: 'ausgang' },
-    { kw: ['baugenehmigung', 'genehmigung'],  kat: 'Genehmigung',               richtung: 'eingang' },
-    { kw: ['mängelrüge', 'mangel'],           kat: 'Mängelrüge',                richtung: 'eingang' },
-    { kw: ['vertrag', 'contract'],            kat: 'Vertrag',                   richtung: 'intern'  },
-    { kw: ['aufmaß'],                         kat: 'Aufmaß',                    richtung: 'intern'  },
-    { kw: ['stundenzettel', 'stundenlohn'],   kat: 'Stundenzettel',             richtung: 'intern'  },
-    { kw: ['zertifikat', 'prüfprotokoll'],    kat: 'Zertifikat/Prüfprotokoll',  richtung: 'eingang' },
-    { kw: ['sicherheitsdatenblatt'],          kat: 'Sicherheitsdatenblatt',     richtung: 'eingang' },
-  ];
-
-  let erkannterKatName = null;
-  for (const { kw, kat, richtung } of typMap) {
-    if (kw.some(w => lower.includes(w))) {
-      erkannterKatName = kat;
-      const sel = document.getElementById('selKategorie');
-      for (const opt of sel.options) {
-        if (opt.text.toLowerCase().startsWith(kat.toLowerCase())) { sel.value = opt.value; break; }
-      }
-      form.querySelector('[name="richtung"]').value = richtung;
-      break;
-    }
-  }
-
-  // 2. Titel — erste kurze, nicht-leere Zeile
-  const titelFeld = form.querySelector('[name="titel"]');
-  if (!titelFeld.value) {
-    const lines = text.split('\n')
-      .map(l => l.replace(/^#+\s*/, '').replace(/\*+/g, '').trim())
-      .filter(l => l.length > 3 && l.length < 120);
-    if (lines.length) {
-      titelFeld.value = lines[0].slice(0, 80);
-    } else if (erkannterKatName) {
-      titelFeld.value = erkannterKatName;
-    }
-  }
-
-  // 3. Betrag — größten EUR-Wert nehmen (Gesamtbetrag)
-  const betragFeld = form.querySelector('[name="betrag"]');
-  if (!betragFeld.value) {
-    const re1 = /(\d{1,3}(?:[.,]\d{3})*[.,]\d{2})\s*(?:€|EUR)\b/gi;
-    const re2 = /(?:€|EUR|Brutto|Gesamt(?:betrag)?|Summe|Rechnungsbetrag|Endbetrag|Total)[:\s]*(\d{1,3}(?:[.,]\d{3})*[.,]\d{2})/gi;
-    const alle = [...text.matchAll(re1), ...text.matchAll(re2)].map(m => {
-      const raw = m[1].replace(/\./g, '').replace(',', '.');
-      return parseFloat(raw);
-    }).filter(n => !isNaN(n) && n > 0);
-    if (alle.length) betragFeld.value = Math.max(...alle).toFixed(2);
-  }
-
-  // 4. Dokumentdatum — erstes Datum im Text
-  const datumFeld = form.querySelector('[name="dokumentdatum"]');
-  if (!datumFeld.value) {
-    const m = text.match(/\b(\d{2})[.\/-](\d{2})[.\/-](\d{4})\b/);
-    if (m) datumFeld.value = `${m[3]}-${m[2]}-${m[1]}`;
-  }
-
-  // 5. Fälligkeitsdatum — "zahlbar bis", "fällig am" oder Zahlungsziel X Tage
-  const faelligFeld = form.querySelector('[name="faelligkeitsdatum"]');
-  if (!faelligFeld.value) {
-    const mFaellig = text.match(/(?:zahlbar bis|fällig am|due date|due by)[:\s]*(\d{2})[.\/-](\d{2})[.\/-](\d{4})/i);
-    if (mFaellig) {
-      faelligFeld.value = `${mFaellig[3]}-${mFaellig[2]}-${mFaellig[1]}`;
-    } else {
-      const mZiel = text.match(/zahlungsziel[:\s]*(\d+)\s*tag/i);
-      if (mZiel && datumFeld.value) {
-        const dt = new Date(datumFeld.value);
-        dt.setDate(dt.getDate() + parseInt(mZiel[1]));
-        faelligFeld.value = dt.toISOString().slice(0, 10);
-      }
-    }
-  }
-
-  // 6. Beschreibung — erste Sätze des OCR-Texts
-  const beschFeld = form.querySelector('[name="beschreibung"]');
-  if (!beschFeld.value) {
-    const sauber = text.replace(/#+/g, '').replace(/\*+/g, '').replace(/\n{3,}/g, '\n\n').trim();
-    beschFeld.value = sauber.slice(0, 400);
-  }
-
-  // 7. Absender/Empfänger aus Kontaktliste matchen
-  for (const k of alleKontakte) {
-    const name = (k.firma || [k.vorname, k.nachname].filter(Boolean).join(' ')).toLowerCase().trim();
-    if (name.length < 4 || !lower.includes(name)) continue;
-    const richtung = form.querySelector('[name="richtung"]').value;
-    if (richtung === 'eingang') {
-      const sel = document.getElementById('selAbsender');
-      for (const opt of sel.options) { if (opt.value === k.id) { sel.value = k.id; break; } }
-    } else {
-      const sel = document.getElementById('selEmpfaenger');
-      for (const opt of sel.options) { if (opt.value === k.id) { sel.value = k.id; break; } }
-    }
-    break;
-  }
-}
+document.querySelectorAll('.dok-table thead th.sortable').forEach(th => th.addEventListener('click', () => {
+  const col = th.dataset.col;
+  if (sortCol === col) sortAsc = !sortAsc;
+  else { sortCol = col; sortAsc = true; }
+  aktualisiereUI();
+}));
 
 // ── START ──
 ladeAlles();
