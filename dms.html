@@ -129,7 +129,7 @@
     .sb-btn.active .sb-cnt { background: var(--primary); color: #fff; }
 
     .drop-sb {
-      margin: 10px 13px 14px;
+      margin: 13px 13px 10px;
       border: 2px dashed var(--border);
       border-radius: 9px;
       padding: 14px 8px;
@@ -589,6 +589,12 @@
 
   <!-- Sidebar -->
   <aside>
+    <div class="drop-sb" id="dropSb">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+      </svg>
+      Datei ablegen oder klicken
+    </div>
     <div class="sb-sec">
       <h3>Übersicht</h3>
       <div class="stat-grid">
@@ -605,12 +611,6 @@
     <div class="sb-sec">
       <h3>Priorität</h3>
       <div id="prioFilter"></div>
-    </div>
-    <div class="drop-sb" id="dropSb">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
-      </svg>
-      Datei ablegen oder klicken
     </div>
   </aside>
 
